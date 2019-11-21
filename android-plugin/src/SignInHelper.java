@@ -36,7 +36,6 @@ public class SignInHelper {
         boolean hasPermissionsGranted = GoogleSignIn.hasPermissions(googleSignInAccount, signInOptions.getScopeArray());
 
         if (hasPermissionsGranted) {
-            GoogleSignInAccount signedInAccount = googleSignInAccount;
             godotCallbacksUtils.invokeGodotCallback(godotInstanceId, GodotCallbacksUtils.SIGNIN_SUCCESSFUL, new Object[]{});
         } else {
             googleSignInClient
@@ -45,7 +44,6 @@ public class SignInHelper {
                         @Override
                         public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
                             if (task.isSuccessful()) {
-                                GoogleSignInAccount signedInAccount = task.getResult();
                                 godotCallbacksUtils.invokeGodotCallback(godotInstanceId, GodotCallbacksUtils.SIGNIN_SUCCESSFUL, new Object[]{});
                             } else {
                                 Intent intent = googleSignInClient.getSignInIntent();
@@ -65,7 +63,6 @@ public class SignInHelper {
     public void onSignInActivityResult(Intent data) {
         GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
         if (googleSignInResult.isSuccess()) {
-            GoogleSignInAccount signedInAccount = googleSignInResult.getSignInAccount();
             godotCallbacksUtils.invokeGodotCallback(godotInstanceId, GodotCallbacksUtils.SIGNIN_SUCCESSFUL, new Object[]{});
         } else {
             godotCallbacksUtils.invokeGodotCallback(godotInstanceId, GodotCallbacksUtils.SIGNIN_FAILED, new Object[]{googleSignInResult.getStatus().getStatusCode()});
