@@ -15,8 +15,8 @@ This is an Android Play Games Services plugin for Godot Game Engine 3.2 and high
 ## Getting started
 ### Set up
 - Set up the custom build environment for your project and enable it. See [Godot Engine docs](https://docs.godotengine.org/en/latest/getting_started/workflow/export/android_custom_build.html).
-- Download and move `android-plugin` from the current repository into `res://android/` of your godot project.
-- After what downloading `android-plugin`, open it and go to `res` -> `values`. Search for `ids.xml` and open it. Replace `PUT_YOUR_APP_ID_HERE` with your Games Services Application ID for the `app_id` resource. (Don't forget to save file)
+- Download and move `android-pgs-plugin` from the current repository into `res://android/` of your godot project.
+- After downloading `android-pgs-plugin`, open it and go to `res` -> `values`. Search for `ids.xml` and open it. Replace `PUT_YOUR_APP_ID_HERE` with your Games Services Application ID for the `app_id` resource. (Don't forget to save file)
 - In Godot Engine, go to `Project` -> `Project Settings`. Then on the tab `General` go to the `Android` section, and fill the `Modules` part with `org/godotengine/godot/PlayGameServices`. See [Godot Engine docs](
 https://docs.godotengine.org/en/latest/tutorials/plugins/android/android_plugin.html#using-it-from-gdscript).
 
