@@ -20,6 +20,7 @@ modules="org/godotengine/godot/PlayGameServices"
 [application]
 
 config/name="Demo"
+run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
 [rendering]
