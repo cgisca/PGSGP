@@ -5,6 +5,7 @@ This is an Android Play Games Services plugin for Godot Game Engine 3.2 and high
 [![Godot](https://img.shields.io/badge/Godot%20Engine-3.2-blue.svg)](https://github.com/godotengine/godot/)
 [![PGS](https://img.shields.io/badge/Play%20Games%20Services-19.0.0-green.svg)](https://developers.google.com/games/services/android/quickstart)
 [![MIT license](https://img.shields.io/badge/License-MIT-yellowgreen.svg)](https://lbesson.mit-license.org/)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-informational.svg)](https://paypal.me/cgisca)
 
 
 ### Supported features:
@@ -46,7 +47,7 @@ play_games_services.sign_in()
 play_games_services.sign_out()
 ```
 ```GdScript
-#Godot callbacks received
+#Godot callbacks
 func _on_sign_in_success() -> void:
 	pass
   
@@ -71,7 +72,7 @@ play_games_services.increment_achievement("ACHIEVEMENT_ID", step)
 play_games_services.show_achievements()
 ```
 ```GdScript
-#Godot callbacks received
+#Godot callbacks
 func _on_achievement_unlocked(achievement: String) -> void:
 	pass
 
@@ -98,7 +99,7 @@ play_games_services.submit_leaderboard_score("LEADERBOARD_ID", score)
 play_games_services.show_leaderboard("LEADERBOARD_ID")
 ```
 ```GdScript
-#Godot callbacks received
+#Godot callbacks
 func _on_leaderboard_score_submitted(leaderboard_id: String) -> void:
 	pass
 
@@ -110,7 +111,11 @@ func _on_leaderboard_score_submitting_failed(leaderboard_id: String) -> void:
 play_games_services.is_player_connected()
 ```
 ```GdScript
-#Godot callbacks received
+#Godot callbacks
 func _on_player_is_already_connected(is_connected: bool) -> void:
 	pass
 ```
+## Donations
+If you found this project helpful, a :coffee: is more then welcomed :see_no_evil:
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/cgisca)
