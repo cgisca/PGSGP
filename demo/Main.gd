@@ -21,7 +21,6 @@ func sign_out() -> void:
 
 
 # Callbacks
-
 func _on_sign_in_success() -> void:
 	pass
 

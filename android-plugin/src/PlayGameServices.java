@@ -2,37 +2,50 @@ package org.godotengine.godot;
 
 import android.app.Activity;
 import android.content.Intent;
-
-import com.godot.game.R;
-
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 public class PlayGameServices extends Godot.SingletonBase {
 
     private Activity appActivity;
     private Godot activity;
-    private GodotCallbacksUtils godotCallbacksUtils = new GodotCallbacksUtils();
-    private SignInHelper signInHelper;
 
-    private final GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build();
+    private SignInController signInController;
+    private GodotCallbacksUtils godotCallbacksUtils;
+    private ConnectionController connectionController;
+    private AchievementsController achievementsController;
+    private LeaderboardsController leaderboardsController;
+
+    private GoogleSignInOptions signInOptions = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
     private GoogleSignInClient googleSignInClient;
-
 
     public PlayGameServices(Activity appActivity) {
         this.appActivity = appActivity;
         this.activity = (Godot) appActivity;
-        this.signInHelper = new SignInHelper(appActivity, godotCallbacksUtils);
-        this.googleSignInClient = GoogleSignIn.getClient(appActivity, signInOptions);
+
+        godotCallbacksUtils = new GodotCallbacksUtils();
+        connectionController = new ConnectionController(appActivity, signInOptions);
+        signInController = new SignInController(appActivity, godotCallbacksUtils, connectionController);
+        achievementsController = new AchievementsController(appActivity, connectionController, godotCallbacksUtils);
+        leaderboardsController = new LeaderboardsController(appActivity, godotCallbacksUtils, connectionController);
+
+        googleSignInClient = GoogleSignIn.getClient(appActivity, signInOptions);
 
         registerClass("PlayGameServices", new String[]
                 {
                         "init",
                         "sign_in",
-                        "sign_out"
+                        "sign_out",
+                        "is_player_connected",
+                        "show_achievements",
+                        "unlock_achievement",
+                        "reveal_achievement",
+                        "increment_achievement",
+                        "show_leaderboard",
+                        "submit_leaderboard_score"
                 });
     }
 
@@ -41,8 +54,12 @@ public class PlayGameServices extends Godot.SingletonBase {
     }
 
     protected void onMainActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SignInHelper.RC_SIGN_IN) {
-            signInHelper.onSignInActivityResult(data);
+        if (requestCode == SignInController.RC_SIGN_IN) {
+            GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            signInController.onSignInActivityResult(googleSignInResult);
+        } else if (requestCode == AchievementsController.RC_ACHIEVEMENT_UI || requestCode == LeaderboardsController.RC_LEADERBOARD_UI) {
+            boolean isConnected = connectionController.isConnected();
+            godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_CONNECTED, new Object[]{isConnected});
         }
     }
 
@@ -50,7 +67,7 @@ public class PlayGameServices extends Godot.SingletonBase {
         appActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                signInHelper.setGodotInstanceId(instanceId);
+                godotCallbacksUtils.setGodotInstanceId(instanceId);
             }
         });
     }
@@ -59,7 +76,7 @@ public class PlayGameServices extends Godot.SingletonBase {
         appActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                signInHelper.silentSignIn(signInOptions, googleSignInClient);
+                signInController.signIn(googleSignInClient);
             }
         });
     }
@@ -68,7 +85,70 @@ public class PlayGameServices extends Godot.SingletonBase {
         appActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                signInHelper.signOut(googleSignInClient);
+                signInController.signOut(googleSignInClient);
+            }
+        });
+    }
+
+    public void is_player_connected() {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_CONNECTED, new Object[]{connectionController.isConnected()});
+            }
+        });
+    }
+
+    public void show_achievements() {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                achievementsController.showAchievements();
+            }
+        });
+    }
+
+    public void unlock_achievement(final String achievement) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                achievementsController.unlockAchievement(achievement);
+            }
+        });
+    }
+
+    public void reveal_achievement(final String achievement) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                achievementsController.revealAchievement(achievement);
+            }
+        });
+    }
+
+    public void increment_achievement(final String achievement, final int step) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                achievementsController.incrementAchievement(achievement, step);
+            }
+        });
+    }
+
+    public void show_leaderboard(final String leaderboardId) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                leaderboardsController.showLeaderboard(leaderboardId);
+            }
+        });
+    }
+
+    public void submit_leaderboard_score(final String leaderboardId, final int score) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                leaderboardsController.submitScore(leaderboardId, score);
             }
         });
     }
