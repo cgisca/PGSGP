@@ -27,7 +27,15 @@ public class GodotCallbacksUtils {
      */
     public static final String LEADERBOARD_SCORE_SUBMITTED = "_on_leaderboard_score_submitted";
     public static final String LEADERBOARD_SCORE_SUBMITTED_FAILED = "_on_leaderboard_score_submitting_failed";
-
+    /**
+     * Events callbacks
+     */
+    public static final String EVENT_SUBMITTED = "_on_event_submitted";
+    public static final String EVENT_SUBMITTED_FAILED = "_on_event_submitting_failed";
+    public static final String EVENTS_LOADED = "_on_events_loaded";
+    public static final String EVENTS_EMPTY = "_on_events_empty";
+    public static final String EVENTS_LOADED_FAILED = "_on_events_loading_failed";
+    
     private int godotInstanceId;
 
     public void setGodotInstanceId(int godotInstanceId) {

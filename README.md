@@ -1,4 +1,4 @@
-# Android Google Play Games Services Plugin for Godot 
+# Google Play Games Services Plugin for Godot 
 This is an Android Play Games Services plugin for Godot Game Engine 3.2 and higher. 
 
 [![Android](https://img.shields.io/badge/Platform-Android-brightgreen.svg)](https://developer.android.com)
@@ -12,6 +12,7 @@ This is an Android Play Games Services plugin for Godot Game Engine 3.2 and high
 - Sign-in/Sign out
 - Achievements
 - Leaderboards
+- Events
 
 ## Getting started
 ### Set up
@@ -48,16 +49,16 @@ play_games_services.sign_out()
 ```
 ```GdScript
 #Godot callbacks
-func _on_sign_in_success() -> void:
+func _on_sign_in_success():
 	pass
   
-func _on_sign_in_failed(error_code: int) -> void:
+func _on_sign_in_failed(error_code: int):
 	pass
 
-func _on_sign_out_success() -> void:
+func _on_sign_out_success():
 	pass
   
-func _on_sign_out_failed() -> void:
+func _on_sign_out_failed():
 	pass
 ```
 ##### Achievements
@@ -73,22 +74,22 @@ play_games_services.show_achievements()
 ```
 ```GdScript
 #Godot callbacks
-func _on_achievement_unlocked(achievement: String) -> void:
+func _on_achievement_unlocked(achievement: String):
 	pass
 
-func _on_achievement_unlocking_failed(achievement: String) -> void:
+func _on_achievement_unlocking_failed(achievement: String):
 	pass
 
-func _on_achievement_revealed(achievement: String) -> void:
+func _on_achievement_revealed(achievement: String):
 	pass
 
-func _on_achievement_revealing_failed(achievement: String) -> void:
+func _on_achievement_revealing_failed(achievement: String):
 	pass
 
-func _on_achievement_incremented(achievement: String) -> void:
+func _on_achievement_incremented(achievement: String):
 	pass
 
-func _on_achievement_incrementing_failed(achievement: String) -> void:
+func _on_achievement_incrementing_failed(achievement: String):
 	pass
 ```
 ##### Leaderboards
@@ -100,10 +101,10 @@ play_games_services.show_leaderboard("LEADERBOARD_ID")
 ```
 ```GdScript
 #Godot callbacks
-func _on_leaderboard_score_submitted(leaderboard_id: String) -> void:
+func _on_leaderboard_score_submitted(leaderboard_id: String):
 	pass
 
-func _on_leaderboard_score_submitting_failed(leaderboard_id: String) -> void:
+func _on_leaderboard_score_submitting_failed(leaderboard_id: String):
 	pass
 ```
 ##### Player connection
@@ -112,9 +113,47 @@ play_games_services.is_player_connected()
 ```
 ```GdScript
 #Godot callbacks
-func _on_player_is_already_connected(is_connected: bool) -> void:
+func _on_player_is_already_connected(is_connected: bool):
 	pass
 ```
+##### Events
+```GdScript
+var increment_by := 2
+play_games_services.submit_event("EVENT_ID", increment_by)
+
+play_games_services.load_events()
+
+play_games_services.load_events_by_id(["EVENT_ID_1", "EVENT_ID_2", ...])
+```
+```GdScript
+#Godot callbacks
+func _on_event_submitted(event_id: String):
+	pass
+	
+func _on_event_submitted_failed(event_id: String):
+	pass
+
+func _on_events_loaded(events_array):
+	var available_events = events_array[0] # here we get a list of all available events
+	for event in available_events:
+		event[0] # event id
+		event[1] # event name
+		event[2] # event description
+		event[3] # event image url
+		event[4] # event value
+	pass
+
+func _on_events_loading_failed():
+	pass
+
+func _on_events_empty():
+	pass
+
+```
+## Troubleshooting
+Check `adb logcat` for debuging.
+To filter only Godot messages use next command:
+`adb logcat -s godot`
 ## Donations
 If you found this project helpful, a :coffee: is more then welcomed :see_no_evil:
 

@@ -18,6 +18,7 @@ public class PlayGameServices extends Godot.SingletonBase {
     private ConnectionController connectionController;
     private AchievementsController achievementsController;
     private LeaderboardsController leaderboardsController;
+    private EventsController eventsController;
 
     private GoogleSignInOptions signInOptions = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
     private GoogleSignInClient googleSignInClient;
@@ -31,6 +32,7 @@ public class PlayGameServices extends Godot.SingletonBase {
         signInController = new SignInController(appActivity, godotCallbacksUtils, connectionController);
         achievementsController = new AchievementsController(appActivity, connectionController, godotCallbacksUtils);
         leaderboardsController = new LeaderboardsController(appActivity, godotCallbacksUtils, connectionController);
+        eventsController = new EventsController(appActivity, connectionController, godotCallbacksUtils);
 
         googleSignInClient = GoogleSignIn.getClient(appActivity, signInOptions);
 
@@ -45,7 +47,10 @@ public class PlayGameServices extends Godot.SingletonBase {
                         "reveal_achievement",
                         "increment_achievement",
                         "show_leaderboard",
-                        "submit_leaderboard_score"
+                        "submit_leaderboard_score",
+                        "submit_event",
+                        "load_events",
+                        "load_events_by_id"
                 });
     }
 
@@ -149,6 +154,33 @@ public class PlayGameServices extends Godot.SingletonBase {
             @Override
             public void run() {
                 leaderboardsController.submitScore(leaderboardId, score);
+            }
+        });
+    }
+    
+    public void submit_event(final String eventId, final int incrementBy) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                eventsController.submitEvent(eventId, incrementBy);
+            }
+        });
+    }
+
+    public void load_events() {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                eventsController.loadEvents();
+            }
+        });
+    }
+
+    public void load_events_by_id(final String id) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                eventsController.loadEventById(id);
             }
         });
     }
