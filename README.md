@@ -13,6 +13,7 @@ This is an Android Play Games Services plugin for Godot Game Engine 3.2 and high
 - Achievements
 - Leaderboards
 - Events
+- Player Stats
 
 ## Getting started
 ### Set up
@@ -149,6 +150,24 @@ func _on_events_loading_failed():
 func _on_events_empty():
 	pass
 
+```
+##### Player Stats
+```GdScript
+var force_refresh := true # If true, this call will clear any locally cached data and attempt to fetch the latest data from the server.
+play_games_services.load_player_stats(force_refresh)
+```
+```GdScript
+#Godot callbacks	
+func _on_player_stats_loaded(stats):
+	stats[0] # Average session length
+	stats[1] # Days since last played
+	stats[2] # Number of purchases
+	stats[3] # Number of sessions
+	stats[4] # Session percentile
+	stats[5] # Spend percentile
+
+func _on_player_stats_loading_failed():
+	pass
 ```
 ## Troubleshooting
 Check `adb logcat` for debuging.

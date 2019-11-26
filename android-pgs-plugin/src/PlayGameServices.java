@@ -19,6 +19,7 @@ public class PlayGameServices extends Godot.SingletonBase {
     private AchievementsController achievementsController;
     private LeaderboardsController leaderboardsController;
     private EventsController eventsController;
+    private PlayerStatsController playerStatsController;
 
     private GoogleSignInOptions signInOptions = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
     private GoogleSignInClient googleSignInClient;
@@ -33,6 +34,7 @@ public class PlayGameServices extends Godot.SingletonBase {
         achievementsController = new AchievementsController(appActivity, connectionController, godotCallbacksUtils);
         leaderboardsController = new LeaderboardsController(appActivity, godotCallbacksUtils, connectionController);
         eventsController = new EventsController(appActivity, connectionController, godotCallbacksUtils);
+        playerStatsController = new PlayerStatsController(appActivity, connectionController, godotCallbacksUtils);
 
         googleSignInClient = GoogleSignIn.getClient(appActivity, signInOptions);
 
@@ -50,7 +52,8 @@ public class PlayGameServices extends Godot.SingletonBase {
                         "submit_leaderboard_score",
                         "submit_event",
                         "load_events",
-                        "load_events_by_id"
+                        "load_events_by_id",
+                        "load_player_stats"
                 });
     }
 
@@ -176,11 +179,20 @@ public class PlayGameServices extends Godot.SingletonBase {
         });
     }
 
-    public void load_events_by_id(final String id) {
+    public void load_events_by_id(final String[] ids) {
         appActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                eventsController.loadEventById(id);
+                eventsController.loadEventById(ids);
+            }
+        });
+    }
+
+    public void load_player_stats(final boolean forceRefresh) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                playerStatsController.checkPlayerStats(forceRefresh);
             }
         });
     }

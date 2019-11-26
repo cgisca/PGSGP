@@ -59,6 +59,8 @@ public class EventsController {
                             }
                         }
                     });
+        } else {
+            godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENTS_LOADED_FAILED, new Object[]{});
         }
     }
 
@@ -86,6 +88,8 @@ public class EventsController {
                             }
                         }
                     });
+        } else {
+            godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENTS_LOADED_FAILED, new Object[]{});
         }
     }
 

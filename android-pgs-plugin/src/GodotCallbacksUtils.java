@@ -35,6 +35,11 @@ public class GodotCallbacksUtils {
     public static final String EVENTS_LOADED = "_on_events_loaded";
     public static final String EVENTS_EMPTY = "_on_events_empty";
     public static final String EVENTS_LOADED_FAILED = "_on_events_loading_failed";
+        /**
+     * Events callbacks
+     */
+    public static final String PLAYER_STATS_LOADED = "_on_player_stats_loaded";
+    public static final String PLAYER_STATS_LOADED_FAILED = "_on_player_stats_loading_failed";
     
     private int godotInstanceId;
 
