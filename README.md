@@ -43,98 +43,116 @@ if Engine.has_singleton("PlayGameServices"):
   play_games_services.init(get_instance_id())
 ```
 After what plugin was initialized you can use supported features
-##### Sign-in / Sign out
+#### Sign-in / Sign out
+###### Sign-in
+
 ```GdScript
 play_games_services.sign_in()
 
-play_games_services.sign_out()
-```
-```GdScript
-#Godot callbacks
+# Callbacks:
 func _on_sign_in_success():
 	pass
   
 func _on_sign_in_failed(error_code: int):
 	pass
 
+```
+###### Sign out
+```GdScript
+play_games_services.sign_out()
+
+# Callbacks:
 func _on_sign_out_success():
 	pass
   
 func _on_sign_out_failed():
 	pass
 ```
-##### Achievements
+#### Achievements
+###### Unlock Achievement
 ```GdScript
 play_games_services.unlock_achievement("ACHIEVEMENT_ID")
 
-play_games_services.reveal_achievement("ACHIEVEMENT_ID")
-
-var step = 1
-play_games_services.increment_achievement("ACHIEVEMENT_ID", step)
-
-play_games_services.show_achievements()
-```
-```GdScript
-#Godot callbacks
+# Callbacks:
 func _on_achievement_unlocked(achievement: String):
 	pass
 
 func _on_achievement_unlocking_failed(achievement: String):
 	pass
+```
+###### Increment Achievement
+```GdScript
+var step = 1
+play_games_services.increment_achievement("ACHIEVEMENT_ID", step)
 
-func _on_achievement_revealed(achievement: String):
-	pass
-
-func _on_achievement_revealing_failed(achievement: String):
-	pass
-
+# Callbacks:
 func _on_achievement_incremented(achievement: String):
 	pass
 
 func _on_achievement_incrementing_failed(achievement: String):
 	pass
 ```
-##### Leaderboards
+###### Reveal Achievement
+```GdScript
+play_games_services.reveal_achievement("ACHIEVEMENT_ID")
+
+# Callbacks:
+func _on_achievement_revealed(achievement: String):
+	pass
+
+func _on_achievement_revealing_failed(achievement: String):
+	pass
+```
+###### Show Achievements List
+```GdScript
+play_games_services.show_achievements()
+```
+#### Leaderboards
+###### Submit leaderboard score
 ```GdScript
 var score = 1234
 play_games_services.submit_leaderboard_score("LEADERBOARD_ID", score)
 
-play_games_services.show_leaderboard("LEADERBOARD_ID")
-```
-```GdScript
-#Godot callbacks
+# Callbacks:
 func _on_leaderboard_score_submitted(leaderboard_id: String):
 	pass
 
 func _on_leaderboard_score_submitting_failed(leaderboard_id: String):
 	pass
 ```
-##### Player connection
+###### Show leaderboard
+```GdScript
+play_games_services.show_leaderboard("LEADERBOARD_ID")
+```
+#### Player connection
 ```GdScript
 play_games_services.is_player_connected()
-```
-```GdScript
-#Godot callbacks
+
+#Callback:
 func _on_player_is_already_connected(is_connected: bool):
 	pass
 ```
-##### Events
+#### Events
+###### Submit event
 ```GdScript
 var increment_by := 2
 play_games_services.submit_event("EVENT_ID", increment_by)
 
-play_games_services.load_events()
-
-play_games_services.load_events_by_id(["EVENT_ID_1", "EVENT_ID_2", ...])
-```
-```GdScript
-#Godot callbacks
+# Callbacks:
 func _on_event_submitted(event_id: String):
 	pass
 	
 func _on_event_submitted_failed(event_id: String):
 	pass
+```
+###### Load events
+```GdScript
+# Load all events
+play_games_services.load_events()
+# Or load events by given ids
+play_games_services.load_events_by_id(["EVENT_ID_1", "EVENT_ID_2", ...])
 
+# Callbacks:
 func _on_events_loaded(events_array):
 	var available_events = events_array[0] # here we get a list of all available events
 	for event in available_events:
@@ -152,13 +170,12 @@ func _on_events_empty():
 	pass
 
 ```
-##### Player Stats
+#### Player Stats
 ```GdScript
 var force_refresh := true # If true, this call will clear any locally cached data and attempt to fetch the latest data from the server.
 play_games_services.load_player_stats(force_refresh)
-```
-```GdScript
-#Godot callbacks	
+
+# Callbacks:	
 func _on_player_stats_loaded(stats):
 	stats[0] # Average session length
 	stats[1] # Days since last played
@@ -170,10 +187,9 @@ func _on_player_stats_loaded(stats):
 func _on_player_stats_loading_failed():
 	pass
 ```
-##### Saved Games
+#### Saved Games
+###### Save game snapshot
 ```GdScript
-play_games_services.load_snapshot("SNAPSHOT_NAME")
-
 var data_to_save: Dictionary = {
 		"name": "John", 
 		"age": 22,
@@ -182,19 +198,18 @@ var data_to_save: Dictionary = {
 	}
 play_games_services.save_snapshot("SNAPSHOT_NAME", to_json(data_to_save), "DESCRIPTION")
 
-var allow_add_button := true
-var allow_delete_button := true
-var max_saved_games_snapshots := 5
-play_games_services.show_saved_games("SNAPSHOT_NAME", allow_add_button, allow_delete_button, max_saved_games_snapshots)
-```
-```GdScript
-#Godot callbacks	
+# Callbacks:
 func _on_game_saved_success():
 	pass
 	
 func _on_game_saved_fail():
 	pass
-	
+```
+###### Load game snapshot
+```GdScript
+play_games_services.load_snapshot("SNAPSHOT_NAME")
+
+# Callbacks:
 func _on_game_load_success(data):
 	var game_data: Dictionary = parse_json(data)
 	var name  := game_data["name"]
@@ -204,7 +219,16 @@ func _on_game_load_success(data):
 	
 func _on_game_load_fail():
 	pass
-	
+```
+###### Show saved snapshots screen
+```GdScript
+var allow_add_button := true
+var allow_delete_button := true
+var max_saved_games_snapshots := 5
+play_games_services.show_saved_games("SNAPSHOT_NAME", allow_add_button, allow_delete_button, max_saved_games_snapshots)
+
+#Godot callback	
+# If user clicked on add new snapshot button on the screen with all saved snapshots, below callback will be triggered:
 func _on_create_new_snapshot(name):
 	var game_data_to_save: Dictionary = {
 		"name": "John", 
