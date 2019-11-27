@@ -12,6 +12,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class EventsController {
 
@@ -46,11 +49,11 @@ public class EventsController {
                             if (task.isSuccessful() && task.getResult() != null) {
                                 EventBuffer events = task.getResult().get();
                                 if (events != null) {
-                                    List<String[]> eventList = new ArrayList<>();
+                                    JSONArray jsonArray = new JSONArray();
                                     for (Event event : events) {
-                                        eventList.add(eventInfoArray(event));
+                                        jsonArray.put(eventInfoArray(event));
                                     }
-                                    godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENTS_LOADED, new Object[]{new Object[]{eventList.toArray()}});
+                                    godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENTS_LOADED, new Object[]{jsonArray.toString()});
                                 } else {
                                     godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENTS_EMPTY, new Object[]{});
                                 }
@@ -75,11 +78,11 @@ public class EventsController {
                             if (task.isSuccessful() && task.getResult() != null) {
                                 EventBuffer events = task.getResult().get();
                                 if (events != null) {
-                                    List<String[]> eventList = new ArrayList<>();
+                                    JSONArray jsonArray = new JSONArray();
                                     for (Event event : events) {
-                                        eventList.add(eventInfoArray(event));
+                                        jsonArray.put(eventInfoArray(event));
                                     }
-                                    godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENTS_LOADED, new Object[]{new Object[]{eventList.toArray()}});
+                                    godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENTS_LOADED, new Object[]{jsonArray.toString()});
                                 } else {
                                     godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENTS_EMPTY, new Object[]{});
                                 }
@@ -93,12 +96,17 @@ public class EventsController {
         }
     }
 
-    private String[] eventInfoArray(Event event) {
-        String id = event.getEventId();
-        String name = event.getName();
-        String value = String.valueOf(event.getValue());
-        String description = event.getDescription();
-        String imgUrl = event.getIconImageUrl();
-        return new String[]{id, name, description, imgUrl, value};
+    private JSONObject eventInfoArray(Event event) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("id", event.getEventId());
+            json.put("name", event.getName());
+            json.put("value", event.getValue());
+            json.put("description", event.getDescription());
+            json.put("imgUrl", event.getIconImageUrl());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }

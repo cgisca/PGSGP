@@ -153,20 +153,24 @@ play_games_services.load_events()
 play_games_services.load_events_by_id(["EVENT_ID_1", "EVENT_ID_2", ...])
 
 # Callbacks:
+# If there is at least on event, following callback will be triggered:
 func _on_events_loaded(events_array):
-	var available_events = events_array[0] # here we get a list of all available events
+	# Parse received string json of events using parse_json
+	var available_events = parse_json(events_array)
+	# Iterate through the events_list to retrieve data for specific events
 	for event in available_events:
-		event[0] # event id
-		event[1] # event name
-		event[2] # event description
-		event[3] # event image url
-		event[4] # event value
-	pass
-
-func _on_events_loading_failed():
-	pass
-
+		var event_id = event["id"] # you can get event id using 'id' key
+		var event_name = event["name"] # you can get event name using 'name' key
+		var event_desc = event["description"] # you can get event name using 'description' key 
+		var event_img = event["imgUrl"] # you can get event name using 'imgUrl' key
+		var event_value = event["value"] # you can get event name using 'value' key  
+	
+# Triggered if there are no events:
 func _on_events_empty():
+	pass
+
+# Triggered if something went wrong:
+func _on_events_loading_failed():
 	pass
 
 ```
