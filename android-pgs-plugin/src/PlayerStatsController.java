@@ -9,6 +9,8 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.games.stats.PlayerStats;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class PlayerStatsController {
 
@@ -33,23 +35,19 @@ public class PlayerStatsController {
                             AnnotatedData<PlayerStats> result = task.getResult();
                             if (task.isSuccessful() && result != null && result.get() != null) {
                                 PlayerStats stats = result.get();
-                                float averageSessionLength = stats.getAverageSessionLength();
-                                float daysSinceLastPlayed = stats.getDaysSinceLastPlayed();
-                                float numberOfPurchases = stats.getNumberOfPurchases();
-                                float numberOfSessions = stats.getNumberOfSessions();
-                                float sessionPercentile = stats.getSessionPercentile();
-                                float spendPercentile = stats.getSpendPercentile();
+                                JSONObject json = new JSONObject();
+                                try {
+                                    json.put("avg_session_length", stats.getAverageSessionLength());
+                                    json.put("days_last_played", stats.getDaysSinceLastPlayed());
+                                    json.put("purchases", stats.getNumberOfPurchases());
+                                    json.put("sessions", stats.getNumberOfSessions());
+                                    json.put("session_percentile", stats.getSessionPercentile());
+                                    json.put("spend_percentile", stats.getSpendPercentile());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_STATS_LOADED,
-                                        new Object[]{
-                                                new float[]{
-                                                        averageSessionLength,
-                                                        daysSinceLastPlayed,
-                                                        numberOfPurchases,
-                                                        numberOfSessions,
-                                                        sessionPercentile,
-                                                        spendPercentile
-                                                }
-                                        });
+                                        new Object[]{json.toString()});
                             } else {
                                 godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_STATS_LOADED_FAILED, new Object[]{});
                             }
@@ -59,5 +57,4 @@ public class PlayerStatsController {
             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_STATS_LOADED_FAILED, new Object[]{});
         }
     }
-
 }

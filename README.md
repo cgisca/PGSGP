@@ -181,12 +181,14 @@ play_games_services.load_player_stats(force_refresh)
 
 # Callbacks:	
 func _on_player_stats_loaded(stats):
-	stats[0] # Average session length
-	stats[1] # Days since last played
-	stats[2] # Number of purchases
-	stats[3] # Number of sessions
-	stats[4] # Session percentile
-	stats[5] # Spend percentile
+	var stats_dictionary: Dictionary = parse_json(stats)
+	# Using below keys you can retrieve data about a player’s in-game activity
+	stats_dictionary["avg_session_length"] # Average session length
+	stats_dictionary["days_last_played"] # Days since last played
+	stats_dictionary["purchases"] # Number of purchases
+	stats_dictionary["sessions"] # Number of sessions
+	stats_dictionary["session_percentile"] # Session percentile
+	stats_dictionary["spend_percentile"] # Spend percentile
 
 func _on_player_stats_loading_failed():
 	pass
