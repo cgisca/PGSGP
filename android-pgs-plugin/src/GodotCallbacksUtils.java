@@ -35,12 +35,20 @@ public class GodotCallbacksUtils {
     public static final String EVENTS_LOADED = "_on_events_loaded";
     public static final String EVENTS_EMPTY = "_on_events_empty";
     public static final String EVENTS_LOADED_FAILED = "_on_events_loading_failed";
-        /**
-     * Events callbacks
+    /**
+     * Player stats callbacks
      */
     public static final String PLAYER_STATS_LOADED = "_on_player_stats_loaded";
     public static final String PLAYER_STATS_LOADED_FAILED = "_on_player_stats_loading_failed";
-    
+    /**
+     * Saved games callbacks
+     */
+    public static final String SAVED_GAME_SUCCESS = "_on_game_saved_success";
+    public static final String SAVED_GAME_FAILED = "_on_game_saved_fail";
+    public static final String SAVED_GAME_LOAD_SUCCESS = "_on_game_load_success";
+    public static final String SAVED_GAME_LOAD_FAIL = "_on_game_load_fail";
+    public static final String SAVED_GAME_CREATE_SNAPSHOT = "_on_create_new_snapshot";
+
     private int godotInstanceId;
 
     public void setGodotInstanceId(int godotInstanceId) {

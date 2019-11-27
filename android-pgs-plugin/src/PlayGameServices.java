@@ -1,5 +1,7 @@
 package org.godotengine.godot;
 
+import com.godot.game.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import com.google.android.gms.auth.api.Auth;
@@ -7,6 +9,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.games.SnapshotsClient;
+import com.google.android.gms.games.snapshot.SnapshotMetadata;
+
+import java.math.BigInteger;
+import java.util.Random;
 
 public class PlayGameServices extends Godot.SingletonBase {
 
@@ -20,8 +28,12 @@ public class PlayGameServices extends Godot.SingletonBase {
     private LeaderboardsController leaderboardsController;
     private EventsController eventsController;
     private PlayerStatsController playerStatsController;
+    private SavedGamesController savedGamesController;
 
-    private GoogleSignInOptions signInOptions = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
+    private GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+          .requestScopes(Drive.SCOPE_APPFOLDER)
+          .build();
+
     private GoogleSignInClient googleSignInClient;
 
     public PlayGameServices(Activity appActivity) {
@@ -35,6 +47,7 @@ public class PlayGameServices extends Godot.SingletonBase {
         leaderboardsController = new LeaderboardsController(appActivity, godotCallbacksUtils, connectionController);
         eventsController = new EventsController(appActivity, connectionController, godotCallbacksUtils);
         playerStatsController = new PlayerStatsController(appActivity, connectionController, godotCallbacksUtils);
+        savedGamesController = new SavedGamesController(appActivity, godotCallbacksUtils, connectionController);
 
         googleSignInClient = GoogleSignIn.getClient(appActivity, signInOptions);
 
@@ -53,7 +66,10 @@ public class PlayGameServices extends Godot.SingletonBase {
                         "submit_event",
                         "load_events",
                         "load_events_by_id",
-                        "load_player_stats"
+                        "load_player_stats",
+                        "show_saved_games",
+                        "save_snapshot",
+                        "load_snapshot"
                 });
     }
 
@@ -68,6 +84,20 @@ public class PlayGameServices extends Godot.SingletonBase {
         } else if (requestCode == AchievementsController.RC_ACHIEVEMENT_UI || requestCode == LeaderboardsController.RC_LEADERBOARD_UI) {
             boolean isConnected = connectionController.isConnected();
             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_CONNECTED, new Object[]{isConnected});
+        } else if (requestCode == SavedGamesController.RC_SAVED_GAMES) {
+            if (data != null) {
+                if (data.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_METADATA)) {
+                    SnapshotMetadata snapshotMetadata = data.getParcelableExtra(SnapshotsClient.EXTRA_SNAPSHOT_METADATA);
+                    if (snapshotMetadata != null) {
+                        savedGamesController.loadSnapshot(snapshotMetadata.getUniqueName());
+                    }
+                } else if (data.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_NEW)) {
+                    String unique = new BigInteger(281, new Random()).toString(13);
+                    String currentSaveName = appActivity.getString(R.string.default_game_name) + unique;
+
+                    savedGamesController.createNewSnapshot(currentSaveName);
+                }
+            }
         }
     }
 
@@ -193,6 +223,33 @@ public class PlayGameServices extends Godot.SingletonBase {
             @Override
             public void run() {
                 playerStatsController.checkPlayerStats(forceRefresh);
+            }
+        });
+    }
+    
+    public void show_saved_games(final String title, final boolean allowAddBtn, final boolean allowDeleteBtn, final int maxGamesListItems) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                savedGamesController.showSavedGamesUI(title, allowAddBtn, allowDeleteBtn, maxGamesListItems);
+            }
+        });
+    }
+
+    public void save_snapshot(final String title, final String dataToSave, final String description) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                savedGamesController.saveSnapshot(title, dataToSave, description);
+            }
+        });
+    }
+
+    public void load_snapshot(final String title) {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                savedGamesController.loadSnapshot(title);
             }
         });
     }

@@ -14,6 +14,7 @@ This is an Android Play Games Services plugin for Godot Game Engine 3.2 and high
 - Leaderboards
 - Events
 - Player Stats
+- Saved Games
 
 ## Getting started
 ### Set up
@@ -168,6 +169,51 @@ func _on_player_stats_loaded(stats):
 
 func _on_player_stats_loading_failed():
 	pass
+```
+##### Saved Games
+```GdScript
+play_games_services.load_snapshot("SNAPSHOT_NAME")
+
+var data_to_save: Dictionary = {
+		"name": "John", 
+		"age": 22,
+		"height": 1.82,
+		"is_gamer": true
+	}
+play_games_services.save_snapshot("SNAPSHOT_NAME", to_json(data_to_save), "DESCRIPTION")
+
+var allow_add_button := true
+var allow_delete_button := true
+var max_saved_games_snapshots := 5
+play_games_services.show_saved_games("SNAPSHOT_NAME", allow_add_button, allow_delete_button, max_saved_games_snapshots)
+```
+```GdScript
+#Godot callbacks	
+func _on_game_saved_success():
+	pass
+	
+func _on_game_saved_fail():
+	pass
+	
+func _on_game_load_success(data):
+	var game_data: Dictionary = parse_json(data)
+	var name  := game_data["name"]
+	var age := game_data["age"]
+	#...
+	
+	
+func _on_game_load_fail():
+	pass
+	
+func _on_create_new_snapshot(name):
+	var game_data_to_save: Dictionary = {
+		"name": "John", 
+		"age": 22,
+		"height": 1.82,
+		"is_gamer": true
+	}
+	play_games_services.save_snapshot(name, to_json(game_data_to_save), "DESCRIPTION")
+
 ```
 ## Troubleshooting
 Check `adb logcat` for debuging.
