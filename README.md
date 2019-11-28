@@ -154,7 +154,7 @@ play_games_services.load_events()
 play_games_services.load_events_by_id(["EVENT_ID_1", "EVENT_ID_2", ...])
 
 # Callbacks:
-# If there is at least on event, following callback will be triggered:
+# If there is at least one event, following callback will be triggered:
 func _on_events_loaded(events_array):
 	# Parse received string json of events using parse_json
 	var available_events = parse_json(events_array)
@@ -219,8 +219,8 @@ play_games_services.load_snapshot("SNAPSHOT_NAME")
 # Callbacks:
 func _on_game_load_success(data):
 	var game_data: Dictionary = parse_json(data)
-	var name  := game_data["name"]
-	var age := game_data["age"]
+	var name = game_data["name"]
+	var age = game_data["age"]
 	#...
 	
 	
