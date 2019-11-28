@@ -25,6 +25,7 @@ This is an Android Play Games Services plugin for Godot Game Engine 3.2 and high
 https://docs.godotengine.org/en/latest/tutorials/plugins/android/android_plugin.html#using-it-from-gdscript).
 <br/>*Note: If you have already added one plugin to the `Modules` append the current one by separating them with comma (ex: `xx/xx/Module1,org/godotengine/godot/PlayGameServices`)
 <br/>*Note 2: If you have already added other plugin that has `meta-data android:name="com.google.android.gms.version"` declared inside it's `AndroidManifest`, remove **below lines** from the `android-pgs-plugin`-> `AndroidManifest.conf` file.  (Don't forget to save file after removing below lines)
+
 ```xml
 <meta-data android:name="com.google.android.gms.version"
     android:value="@integer/google_play_services_version" />
@@ -33,7 +34,7 @@ https://docs.godotengine.org/en/latest/tutorials/plugins/android/android_plugin.
 
 ### How to use
 First step is plugin initialization
-```GdScript
+```gdscript
 var play_games_services
 # Check if plugin was added to the project
 if Engine.has_singleton("PlayGameServices"):
@@ -44,9 +45,9 @@ if Engine.has_singleton("PlayGameServices"):
 ```
 After what plugin was initialized you can use supported features
 #### Sign-in / Sign out
-###### Sign-in
+##### Sign-in
 
-```GdScript
+```gdscript
 play_games_services.sign_in()
 
 # Callbacks:
@@ -57,8 +58,8 @@ func _on_sign_in_failed(error_code: int):
 	pass
 
 ```
-###### Sign out
-```GdScript
+##### Sign out
+```gdscript
 play_games_services.sign_out()
 
 # Callbacks:
@@ -69,8 +70,8 @@ func _on_sign_out_failed():
 	pass
 ```
 #### Achievements
-###### Unlock Achievement
-```GdScript
+##### Unlock Achievement
+```gdscript
 play_games_services.unlock_achievement("ACHIEVEMENT_ID")
 
 # Callbacks:
@@ -80,8 +81,8 @@ func _on_achievement_unlocked(achievement: String):
 func _on_achievement_unlocking_failed(achievement: String):
 	pass
 ```
-###### Increment Achievement
-```GdScript
+##### Increment Achievement
+```gdscript
 var step = 1
 play_games_services.increment_achievement("ACHIEVEMENT_ID", step)
 
@@ -92,8 +93,8 @@ func _on_achievement_incremented(achievement: String):
 func _on_achievement_incrementing_failed(achievement: String):
 	pass
 ```
-###### Reveal Achievement
-```GdScript
+##### Reveal Achievement
+```gdscript
 play_games_services.reveal_achievement("ACHIEVEMENT_ID")
 
 # Callbacks:
@@ -103,13 +104,13 @@ func _on_achievement_revealed(achievement: String):
 func _on_achievement_revealing_failed(achievement: String):
 	pass
 ```
-###### Show Achievements List
-```GdScript
+##### Show Achievements List
+```gdscript
 play_games_services.show_achievements()
 ```
 #### Leaderboards
-###### Submit leaderboard score
-```GdScript
+##### Submit leaderboard score
+```gdscript
 var score = 1234
 play_games_services.submit_leaderboard_score("LEADERBOARD_ID", score)
 
@@ -120,12 +121,12 @@ func _on_leaderboard_score_submitted(leaderboard_id: String):
 func _on_leaderboard_score_submitting_failed(leaderboard_id: String):
 	pass
 ```
-###### Show leaderboard
-```GdScript
+##### Show leaderboard
+```gdscript
 play_games_services.show_leaderboard("LEADERBOARD_ID")
 ```
 #### Player connection
-```GdScript
+```gdscript
 play_games_services.is_player_connected()
 
 #Callback:
@@ -133,8 +134,8 @@ func _on_player_is_already_connected(is_connected: bool):
 	pass
 ```
 #### Events
-###### Submit event
-```GdScript
+##### Submit event
+```gdscript
 var increment_by := 2
 play_games_services.submit_event("EVENT_ID", increment_by)
 
@@ -145,8 +146,8 @@ func _on_event_submitted(event_id: String):
 func _on_event_submitted_failed(event_id: String):
 	pass
 ```
-###### Load events
-```GdScript
+##### Load events
+```gdscript
 # Load all events
 play_games_services.load_events()
 # Or load events by given ids
@@ -175,7 +176,7 @@ func _on_events_loading_failed():
 
 ```
 #### Player Stats
-```GdScript
+```gdscript
 var force_refresh := true # If true, this call will clear any locally cached data and attempt to fetch the latest data from the server.
 play_games_services.load_player_stats(force_refresh)
 
@@ -194,8 +195,8 @@ func _on_player_stats_loading_failed():
 	pass
 ```
 #### Saved Games
-###### Save game snapshot
-```GdScript
+##### Save game snapshot
+```gdscript
 var data_to_save: Dictionary = {
 		"name": "John", 
 		"age": 22,
@@ -211,8 +212,8 @@ func _on_game_saved_success():
 func _on_game_saved_fail():
 	pass
 ```
-###### Load game snapshot
-```GdScript
+##### Load game snapshot
+```gdscript
 play_games_services.load_snapshot("SNAPSHOT_NAME")
 
 # Callbacks:
@@ -226,8 +227,8 @@ func _on_game_load_success(data):
 func _on_game_load_fail():
 	pass
 ```
-###### Show saved snapshots screen
-```GdScript
+##### Show saved snapshots screen
+```gdscript
 var allow_add_button := true
 var allow_delete_button := true
 var max_saved_games_snapshots := 5
