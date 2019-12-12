@@ -101,11 +101,13 @@ public class PlayGameServices extends Godot.SingletonBase {
         }
     }
 
-    public void init(final int instanceId) {
+
+    public void init(final int instanceId, final boolean enablePopups) {
         appActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 godotCallbacksUtils.setGodotInstanceId(instanceId);
+                signInController.setShowPopups(enablePopups);
             }
         });
     }

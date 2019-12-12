@@ -40,8 +40,10 @@ var play_games_services
 if Engine.has_singleton("PlayGameServices"):
   play_games_services = Engine.get_singleton("PlayGameServices")
 	
-  # Initialize plugin by calling init method and passing to it get_instance_id()
-  play_games_services.init(get_instance_id())
+  # Initialize plugin by calling init method and passing to it get_instance_id() and a boolean to enable/disable displaying game pop-ups
+  
+  var show_popups := true # For example, your game can display a “Welcome back” or an “Achievements unlocked” pop-up. true for enabling it.
+  play_games_services.init(get_instance_id(), show_popups)
 ```
 After what plugin was initialized you can use supported features
 #### Sign-in / Sign out
@@ -251,6 +253,6 @@ Check `adb logcat` for debuging.
 To filter only Godot messages use next command:
 `adb logcat -s godot`
 ## Donations
-If you found this project helpful, a :coffee: is more then welcomed :see_no_evil:
+:see_no_evil:
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/cgisca)
