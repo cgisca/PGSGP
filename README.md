@@ -126,6 +126,9 @@ func _on_leaderboard_score_submitting_failed(leaderboard_id: String):
 ##### Show leaderboard
 ```gdscript
 play_games_services.show_leaderboard("LEADERBOARD_ID")
+
+
+play_games_services.show_all_leaderboards()
 ```
 #### Player connection
 ```gdscript

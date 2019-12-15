@@ -44,4 +44,18 @@ public class LeaderboardsController {
                     });
         }
     }
+
+    public void showAllLeaderboards() {
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
+        if (connectionController.isConnected() && googleSignInAccount != null) {
+            Games.getLeaderboardsClient(activity, googleSignInAccount)
+                    .getAllLeaderboardsIntent()
+                    .addOnSuccessListener(new OnSuccessListener<Intent>() {
+                        @Override
+                        public void onSuccess(Intent intent) {
+                            activity.startActivityForResult(intent, RC_LEADERBOARD_UI);
+                        }
+                    });
+        }
+    }
 }

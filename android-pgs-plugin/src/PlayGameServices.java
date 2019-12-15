@@ -62,6 +62,7 @@ public class PlayGameServices extends Godot.SingletonBase {
                         "reveal_achievement",
                         "increment_achievement",
                         "show_leaderboard",
+                        "show_all_leaderboards",
                         "submit_leaderboard_score",
                         "submit_event",
                         "load_events",
@@ -180,6 +181,15 @@ public class PlayGameServices extends Godot.SingletonBase {
             @Override
             public void run() {
                 leaderboardsController.showLeaderboard(leaderboardId);
+            }
+        });
+    }
+
+    public void show_all_leaderboards() {
+        appActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                leaderboardsController.showAllLeaderboards();
             }
         });
     }
