@@ -255,7 +255,4 @@ func _on_create_new_snapshot(name):
 Check `adb logcat` for debuging.
 To filter only Godot messages use next command:
 `adb logcat -s godot`
-## Donations
-:see_no_evil:
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/cgisca)
