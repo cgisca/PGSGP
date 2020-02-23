@@ -1,5 +1,5 @@
 # Changelog
-### 1.1.0:
+### 1.1.0
 Fix crash when trying to sign in
 
 ### 1.0.0
