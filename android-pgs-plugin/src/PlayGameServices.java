@@ -4,6 +4,7 @@ import com.godot.game.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Pair;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,6 +33,7 @@ public class PlayGameServices extends Godot.SingletonBase {
 
     private GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
           .requestScopes(Drive.SCOPE_APPFOLDER)
+          .requestId()
           .build();
 
     private GoogleSignInClient googleSignInClient;
@@ -41,7 +43,7 @@ public class PlayGameServices extends Godot.SingletonBase {
         this.activity = (Godot) appActivity;
 
         godotCallbacksUtils = new GodotCallbacksUtils();
-        connectionController = new ConnectionController(appActivity, signInOptions);
+        connectionController = new ConnectionController(appActivity, signInOptions, godotCallbacksUtils);
         signInController = new SignInController(appActivity, godotCallbacksUtils, connectionController);
         achievementsController = new AchievementsController(appActivity, connectionController, godotCallbacksUtils);
         leaderboardsController = new LeaderboardsController(appActivity, godotCallbacksUtils, connectionController);
@@ -83,8 +85,8 @@ public class PlayGameServices extends Godot.SingletonBase {
             GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             signInController.onSignInActivityResult(googleSignInResult);
         } else if (requestCode == AchievementsController.RC_ACHIEVEMENT_UI || requestCode == LeaderboardsController.RC_LEADERBOARD_UI) {
-            boolean isConnected = connectionController.isConnected();
-            godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_CONNECTED, new Object[]{isConnected});
+            Pair<Boolean, String> isConnected = connectionController.isConnected();
+            godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_CONNECTED, new Object[]{isConnected.first, isConnected.second});
         } else if (requestCode == SavedGamesController.RC_SAVED_GAMES) {
             if (data != null) {
                 if (data.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_METADATA)) {
@@ -135,7 +137,7 @@ public class PlayGameServices extends Godot.SingletonBase {
         appActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.PLAYER_CONNECTED, new Object[]{connectionController.isConnected()});
+                connectionController.checkIsConnected();
             }
         });
     }

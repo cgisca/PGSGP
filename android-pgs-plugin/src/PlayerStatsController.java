@@ -26,7 +26,7 @@ public class PlayerStatsController {
 
     public void checkPlayerStats(boolean forceRefresh) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getPlayerStatsClient(activity, googleSignInAccount)
                     .loadPlayerStats(forceRefresh)
                     .addOnCompleteListener(new OnCompleteListener<AnnotatedData<PlayerStats>>() {

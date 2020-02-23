@@ -10,6 +10,8 @@ import com.google.android.gms.games.event.Event;
 import com.google.android.gms.games.event.EventBuffer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +30,7 @@ public class EventsController {
 
     public void submitEvent(String eventId, int incrementBy) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getEventsClient(activity, googleSignInAccount).increment(eventId, incrementBy);
             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.EVENT_SUBMITTED, new Object[]{eventId});
         } else {
@@ -38,7 +40,7 @@ public class EventsController {
 
     public void loadEvents() {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getEventsClient(activity, googleSignInAccount)
                     .load(true)
                     .addOnCompleteListener(new OnCompleteListener<AnnotatedData<EventBuffer>>() {
@@ -67,7 +69,7 @@ public class EventsController {
 
     public void loadEventById(String[] eventIds) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getEventsClient(activity, googleSignInAccount)
                     .loadByIds(true, eventIds)
                     .addOnCompleteListener(new OnCompleteListener<AnnotatedData<EventBuffer>>() {

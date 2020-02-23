@@ -23,7 +23,7 @@ public class LeaderboardsController {
 
     public void submitScore(String leaderboardId, int score) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getLeaderboardsClient(activity, googleSignInAccount).submitScore(leaderboardId, score);
             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.LEADERBOARD_SCORE_SUBMITTED, new Object[]{leaderboardId});
         } else {
@@ -33,7 +33,7 @@ public class LeaderboardsController {
 
     public void showLeaderboard(String leaderboardId) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getLeaderboardsClient(activity, googleSignInAccount)
                     .getLeaderboardIntent(leaderboardId)
                     .addOnSuccessListener(new OnSuccessListener<Intent>() {
@@ -47,7 +47,7 @@ public class LeaderboardsController {
 
     public void showAllLeaderboards() {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getLeaderboardsClient(activity, googleSignInAccount)
                     .getAllLeaderboardsIntent()
                     .addOnSuccessListener(new OnSuccessListener<Intent>() {

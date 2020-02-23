@@ -2,6 +2,7 @@ package org.godotengine.godot;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Pair;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,7 @@ public class SavedGamesController {
 
     protected void showSavedGamesUI(String title, boolean allowAddBtn, boolean allowDeleteBtn, int maxNumberOfSavedGamesToShow) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             SnapshotsClient snapshotsClient = Games.getSnapshotsClient(activity, googleSignInAccount);
             Task<Intent> intentTask = snapshotsClient.getSelectSnapshotIntent(title, allowAddBtn, allowDeleteBtn, maxNumberOfSavedGamesToShow);
 
@@ -56,7 +57,7 @@ public class SavedGamesController {
                 .setDescription(desc)
                 .build();
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             SnapshotsClient snapshotsClient = Games.getSnapshotsClient(activity, googleSignInAccount);
             Task<SnapshotMetadata> task = snapshotsClient.commitAndClose(snapshot, metadataChange);
             task.addOnCompleteListener(new OnCompleteListener<SnapshotMetadata>() {
@@ -77,29 +78,42 @@ public class SavedGamesController {
 
     protected void saveSnapshot(String gameName, final String dataToSave, final String description) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             SnapshotsClient snapshotsClient = Games.getSnapshotsClient(activity, googleSignInAccount);
             int conflictResolutionPolicy = SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED;
-
+            
             snapshotsClient.open(gameName, true, conflictResolutionPolicy)
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.SAVED_GAME_FAILED, new Object[]{});
                         }
-                    })
-                    .addOnCompleteListener(new OnCompleteListener<SnapshotsClient.DataOrConflict<Snapshot>>() {
-                        @Override
-                        public void onComplete(@NonNull Task<SnapshotsClient.DataOrConflict<Snapshot>> task) {
-                            SnapshotsClient.DataOrConflict<Snapshot> snapshot = task.getResult();
-                            if (snapshot != null && snapshot.getData() != null) {
-                                byte[] data = toByteArray(dataToSave);
-                                writeSnapshot(snapshot.getData(), data, description);
-                            } else {
-                                godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.SAVED_GAME_FAILED, new Object[]{});
-                            }
+                    }).continueWith(new Continuation<SnapshotsClient.DataOrConflict<Snapshot>, Pair<Snapshot, byte[]>>() {
+                @Override
+                public Pair<Snapshot, byte[]> then(@NonNull Task<SnapshotsClient.DataOrConflict<Snapshot>> task) throws Exception {
+                    SnapshotsClient.DataOrConflict<Snapshot> snapshot = task.getResult();
+                    try {
+                        if (snapshot != null && snapshot.getData() != null) {
+                            return new Pair<>(snapshot.getData(), snapshot.getData().getSnapshotContents().readFully());
                         }
-                    });
+                        return null;
+                    } catch (IOException e) {
+                        godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.SAVED_GAME_FAILED, new Object[]{});
+                    }
+                    return null;
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Pair<Snapshot, byte[]>>() {
+                @Override
+                public void onComplete(@NonNull Task<Pair<Snapshot, byte[]>> task) {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        Snapshot snapshot = task.getResult().first;
+                        byte[] data = task.getResult().second;
+                        writeSnapshot(snapshot, data, description);
+                    } else {
+                        godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.SAVED_GAME_FAILED, new Object[]{});
+                    }
+                }
+            });
         } else {
             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.SAVED_GAME_FAILED, new Object[]{});
         }
@@ -107,7 +121,7 @@ public class SavedGamesController {
 
     void loadSnapshot(String gameName) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             SnapshotsClient snapshotsClient = Games.getSnapshotsClient(activity, googleSignInAccount);
             int conflictResolutionPolicy = SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED;
 

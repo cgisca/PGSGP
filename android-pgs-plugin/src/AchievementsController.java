@@ -23,7 +23,7 @@ public class AchievementsController {
 
     public void unlockAchievement(String achievementName) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getAchievementsClient(activity, googleSignInAccount).unlock(achievementName);
             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.ACHIEVEMENT_UNLOCKED, new Object[]{achievementName});
         } else {
@@ -33,7 +33,7 @@ public class AchievementsController {
 
     public void revealAchievement(String achievementName) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getAchievementsClient(activity, googleSignInAccount).reveal(achievementName);
             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.ACHIEVEMENT_REVEALED, new Object[]{achievementName});
         } else {
@@ -43,7 +43,7 @@ public class AchievementsController {
 
     public void incrementAchievement(String achievementName, int step) {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getAchievementsClient(activity, googleSignInAccount).increment(achievementName, step);
             godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.ACHIEVEMENT_INCREMENTED, new Object[]{achievementName});
         } else {
@@ -53,7 +53,7 @@ public class AchievementsController {
 
     public void showAchievements() {
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity);
-        if (connectionController.isConnected() && googleSignInAccount != null) {
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
             Games.getAchievementsClient(activity, googleSignInAccount)
                     .getAchievementsIntent()
                     .addOnSuccessListener(new OnSuccessListener<Intent>() {
