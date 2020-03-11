@@ -30,7 +30,7 @@ https://docs.godotengine.org/en/latest/tutorials/plugins/android/android_plugin.
 <meta-data android:name="com.google.android.gms.version"
     android:value="@integer/google_play_services_version" />
 ```
-
+Make sure you enabled Google Drive API in Google API Console.
 
 ### How to use
 First step is plugin initialization
