@@ -49,7 +49,7 @@ public class SignInController {
 					            if (googleSignInAccount != null && googleSignInAccount.getId() != null) {
 					            	accId = googleSignInAccount.getId();
 					            }
-                            	Log.d("test", accId);
+
                                 godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.SIGNIN_SUCCESSFUL, new Object[]{accId});
                                 enablePopUps();
                             } else {

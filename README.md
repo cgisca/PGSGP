@@ -30,7 +30,6 @@ https://docs.godotengine.org/en/latest/tutorials/plugins/android/android_plugin.
 <meta-data android:name="com.google.android.gms.version"
     android:value="@integer/google_play_services_version" />
 ```
-Make sure you enabled Google Drive API in Google API Console.
 
 ### How to use
 First step is plugin initialization
@@ -43,7 +42,8 @@ if Engine.has_singleton("PlayGameServices"):
   # Initialize plugin by calling init method and passing to it get_instance_id() and a boolean to enable/disable displaying game pop-ups
   
   var show_popups := true # For example, your game can display a “Welcome back” or an “Achievements unlocked” pop-up. true for enabling it.
-  play_games_services.init(get_instance_id(), show_popups)
+  var enable_save_games := true # If you want to enable Saved Games functionality. true for enabling it. If enabled, it will require additional Google Drive API permission from the user.
+  play_games_services.init(get_instance_id(), show_popups, enable_save_games)
 ```
 After what plugin was initialized you can use supported features
 #### Sign-in / Sign out
@@ -53,10 +53,10 @@ After what plugin was initialized you can use supported features
 play_games_services.sign_in()
 
 # Callbacks:
-func _on_sign_in_success():
+func _on_sign_in_success(account_id: String) -> void:
 	pass
   
-func _on_sign_in_failed(error_code: int):
+func _on_sign_in_failed(error_code: int) -> void:
 	pass
 
 ```

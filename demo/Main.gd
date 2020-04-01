@@ -7,7 +7,7 @@ func _ready():
 	if(Engine.has_singleton("PlayGameServices")):
 		play_games_services = Engine.get_singleton("PlayGameServices")
 		
-		play_games_services.init(get_instance_id())
+		play_games_services.init(get_instance_id(), true, false)
 
 
 # Sign-in/sign-out methods
@@ -61,12 +61,34 @@ func submit_leaderboard_score() -> void:
 		play_games_services.submit_leaderboard_score("LEADERBOARD_ID", score)
 
 
+#Save game methods
+func save_game() -> void:
+	var data_to_save: Dictionary = {
+		"name": "John", 
+		"age": 22,
+		"height": 1.82,
+		"is_gamer": true
+		}
+		
+	if play_games_services:
+		play_games_services.save_snapshot("TEST_SNAPSHOT_NAME", to_json(data_to_save), "DESCRIPTION")
+
+
+func show_saved_games() -> void:
+	if play_games_services:
+		play_games_services.show_saved_games("SNAPSHOT_NAME", false, false, 5)
+
+
 # Callbacks
 # Sign-in / sign-out callbacks
-func _on_sign_in_success() -> void:
+func _on_sign_in_success(account_id: String) -> void:
+	print("Success")
+	print(account_id)
 	pass
 
 func _on_sign_in_failed(error_code: int) -> void:
+	print("Failure")
+	print(error_code)
 	pass
 
 func _on_sign_out_success() -> void:
@@ -107,3 +129,28 @@ func _on_leaderboard_score_submitted(leaderboard_id: String) -> void:
 
 func _on_leaderboard_score_submitting_failed(leaderboard_id: String) -> void:
 	pass
+
+
+# Saved game Callbacks:
+func _on_game_saved_success():
+	print("Game saved success")
+	
+func _on_game_saved_fail():
+	print("Game saved fail")
+
+
+###### Buttons callbacks
+func _on_SignInButton_pressed():
+	sign_in()
+
+
+func _on_SignOutButton_pressed():
+	sign_out()
+
+
+func _on_SaveGameButton_pressed():
+	save_game()
+
+
+func _on_ShowSavedGamesButton_pressed():
+	show_saved_games()
