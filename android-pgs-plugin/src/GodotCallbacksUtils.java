@@ -1,5 +1,7 @@
 package org.godotengine.godot;
 
+import org.godotengine.godot.GodotLib;
+
 public class GodotCallbacksUtils {
 
     /**

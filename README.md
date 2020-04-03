@@ -31,6 +31,9 @@ https://docs.godotengine.org/en/latest/tutorials/plugins/android/android_plugin.
     android:value="@integer/google_play_services_version" />
 ```
 
+### Latest version
+Latest version could be found [here (1.2.0)](https://github.com/cgisca/PGSGP/releases/tag/1.2.0).
+
 ### How to use
 First step is plugin initialization
 ```gdscript

@@ -1,6 +1,7 @@
 package org.godotengine.godot;
 
 import com.godot.game.R;
+import org.godotengine.godot.GodotLib;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,27 +32,11 @@ public class PlayGameServices extends Godot.SingletonBase {
     private PlayerStatsController playerStatsController;
     private SavedGamesController savedGamesController;
 
-    private GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-          .requestScopes(Drive.SCOPE_APPFOLDER)
-          .requestId()
-          .build();
-
     private GoogleSignInClient googleSignInClient;
 
     public PlayGameServices(Activity appActivity) {
         this.appActivity = appActivity;
         this.activity = (Godot) appActivity;
-
-        godotCallbacksUtils = new GodotCallbacksUtils();
-        connectionController = new ConnectionController(appActivity, signInOptions, godotCallbacksUtils);
-        signInController = new SignInController(appActivity, godotCallbacksUtils, connectionController);
-        achievementsController = new AchievementsController(appActivity, connectionController, godotCallbacksUtils);
-        leaderboardsController = new LeaderboardsController(appActivity, godotCallbacksUtils, connectionController);
-        eventsController = new EventsController(appActivity, connectionController, godotCallbacksUtils);
-        playerStatsController = new PlayerStatsController(appActivity, connectionController, godotCallbacksUtils);
-        savedGamesController = new SavedGamesController(appActivity, godotCallbacksUtils, connectionController);
-
-        googleSignInClient = GoogleSignIn.getClient(appActivity, signInOptions);
 
         registerClass("PlayGameServices", new String[]
                 {
@@ -74,6 +59,29 @@ public class PlayGameServices extends Godot.SingletonBase {
                         "save_snapshot",
                         "load_snapshot"
                 });
+    }
+
+    private void initializePlayGameServices(boolean enableSaveGamesFunctionality) {
+        GoogleSignInOptions signInOptions = null;
+         
+        if (enableSaveGamesFunctionality) {
+            GoogleSignInOptions.Builder signInOptionsBuilder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+            signInOptionsBuilder.requestScopes(Drive.SCOPE_APPFOLDER).requestId();
+            signInOptions = signInOptionsBuilder.build();
+        } else {
+            signInOptions = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
+        }
+         
+        godotCallbacksUtils = new GodotCallbacksUtils();
+        connectionController = new ConnectionController(appActivity, signInOptions, godotCallbacksUtils);
+        signInController = new SignInController(appActivity, godotCallbacksUtils, connectionController);
+        achievementsController = new AchievementsController(appActivity, connectionController, godotCallbacksUtils);
+        leaderboardsController = new LeaderboardsController(appActivity, godotCallbacksUtils, connectionController);
+        eventsController = new EventsController(appActivity, connectionController, godotCallbacksUtils);
+        playerStatsController = new PlayerStatsController(appActivity, connectionController, godotCallbacksUtils);
+        savedGamesController = new SavedGamesController(appActivity, godotCallbacksUtils, connectionController);
+
+        googleSignInClient = GoogleSignIn.getClient(appActivity, signInOptions);
     }
 
     static public Godot.SingletonBase initialize(Activity activity) {
@@ -105,10 +113,12 @@ public class PlayGameServices extends Godot.SingletonBase {
     }
 
 
-    public void init(final int instanceId, final boolean enablePopups) {
+    public void init(final int instanceId, final boolean enablePopups, final boolean enableSaveGames) {
         appActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                initializePlayGameServices(enableSaveGames);
+
                 godotCallbacksUtils.setGodotInstanceId(instanceId);
                 signInController.setShowPopups(enablePopups);
             }

@@ -92,13 +92,8 @@ public class SavedGamesController {
                 @Override
                 public Pair<Snapshot, byte[]> then(@NonNull Task<SnapshotsClient.DataOrConflict<Snapshot>> task) throws Exception {
                     SnapshotsClient.DataOrConflict<Snapshot> snapshot = task.getResult();
-                    try {
-                        if (snapshot != null && snapshot.getData() != null) {
-                            return new Pair<>(snapshot.getData(), snapshot.getData().getSnapshotContents().readFully());
-                        }
-                        return null;
-                    } catch (IOException e) {
-                        godotCallbacksUtils.invokeGodotCallback(GodotCallbacksUtils.SAVED_GAME_FAILED, new Object[]{});
+                    if (snapshot != null && snapshot.getData() != null) {
+                        return new Pair<>(snapshot.getData(), toByteArray(dataToSave));
                     }
                     return null;
                 }
@@ -173,3 +168,4 @@ public class SavedGamesController {
         return new String(bytes);
     }
 }
+

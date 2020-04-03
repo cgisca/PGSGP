@@ -48,7 +48,15 @@ margin_right = 300.0
 margin_bottom = 320.0
 rect_min_size = Vector2( 200, 50 )
 text = "ShowSavedGames"
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+margin_top = 360.0
+margin_right = 300.0
+margin_bottom = 410.0
+rect_min_size = Vector2( 200, 50 )
+text = "Load saved game"
 [connection signal="pressed" from="VBoxContainer/SignInButton" to="." method="_on_SignInButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/SignOutButton" to="." method="_on_SignOutButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/SaveGameButton" to="." method="_on_SaveGameButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/ShowSavedGamesButton" to="." method="_on_ShowSavedGamesButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_Button_pressed"]

@@ -7,7 +7,7 @@ func _ready():
 	if(Engine.has_singleton("PlayGameServices")):
 		play_games_services = Engine.get_singleton("PlayGameServices")
 		
-		play_games_services.init(get_instance_id(), true, false)
+		play_games_services.init(get_instance_id(), true, true)
 
 
 # Sign-in/sign-out methods
@@ -71,12 +71,12 @@ func save_game() -> void:
 		}
 		
 	if play_games_services:
-		play_games_services.save_snapshot("TEST_SNAPSHOT_NAME", to_json(data_to_save), "DESCRIPTION")
+		play_games_services.save_snapshot("SNAPSHOT_NAME", to_json(data_to_save), "DESCRIPTION")
 
 
 func show_saved_games() -> void:
 	if play_games_services:
-		play_games_services.show_saved_games("SNAPSHOT_NAME", false, false, 5)
+		play_games_services.show_saved_games("SNAPSHOT_NAME", true, true, 5)
 
 
 # Callbacks
@@ -138,6 +138,16 @@ func _on_game_saved_success():
 func _on_game_saved_fail():
 	print("Game saved fail")
 
+func _on_game_load_success(data):
+	var game_data: Dictionary = parse_json(data)
+	
+	
+	print(data)
+	print("=====")
+	print(parse_json(data))
+
+func _on_game_load_fail():
+	pass
 
 ###### Buttons callbacks
 func _on_SignInButton_pressed():
@@ -154,3 +164,8 @@ func _on_SaveGameButton_pressed():
 
 func _on_ShowSavedGamesButton_pressed():
 	show_saved_games()
+
+
+func _on_Button_pressed():
+	if play_games_services:
+		play_games_services.load_snapshot("SNAPSHOT_NAME")
