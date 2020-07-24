@@ -7,7 +7,7 @@ This is an Android Play Games Services plugin for Godot Game Engine 3.2.2+.
 [![MIT license](https://img.shields.io/badge/License-MIT-yellowgreen.svg)](https://lbesson.mit-license.org/)
 
 
-If you want to use the old plugin version visit [Old README file](https://github.com/cgisca/PGSGP/README_OLD.md).
+If you want to use the old plugin version visit [Old README file](https://github.com/cgisca/PGSGP/blob/master/README_OLD.md).
 
 
 ### Supported features:
@@ -21,7 +21,7 @@ If you want to use the old plugin version visit [Old README file](https://github
 ## Getting started
 Before using this plugin please follow instructions on [Setting Up Google Play Games Services](https://developers.google.com/games/services/console/enabling) official guide.
 ### Set up
-- Download `GodotPlayGamesServices.release.aar` and `GodotPlayGamesServices.gdap` from releases section.
+- Download `GodotPlayGamesServices.release.aar` and `GodotPlayGamesServices.gdap` from [releases](https://github.com/cgisca/PGSGP/releases) page.
 - Move the plugin configuration file (`GodotPlayGamesServices.gdap`) and the binary (`GodotPlayGamesServices.release.aar`) downloaded from the previous step to the Godot project's res://android/plugins directory.
 - Enable plugin by accessing `Project` -> `Export`, Plugins section. Follow the [image](https://docs.godotengine.org/en/stable/_images/android_export_preset_plugins_section.png).
 - Go to res://android/build directory. Add below lines to `AndroidManifest.xml`:
