@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.cgisca.godot.gpgs">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+        <meta-data
+            android:name="org.godotengine.plugin.v1.GodotPlayGamesServices"
+            android:value="io.cgisca.godot.gpgs.PlayGameServicesGodot" />
+
+    </application>
+
+</manifest>

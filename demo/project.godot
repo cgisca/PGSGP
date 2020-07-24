@@ -13,15 +13,17 @@ _global_script_class_icons={
 
 }
 
-[android]
-
-modules="org/godotengine/godot/PlayGameServices"
-
 [application]
 
 config/name="Demo"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=600
+window/size/height=1024
+window/handheld/orientation="portrait"
 
 [rendering]
 
