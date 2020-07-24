@@ -243,7 +243,8 @@ func _on_game_load_fail():
 var allow_add_button := true
 var allow_delete_button := true
 var max_saved_games_snapshots := 5
-play_games_services.showSavedGames("SNAPSHOT_NAME", allow_add_button, allow_delete_button, max_saved_games_snapshots)
+var saved_games_screen_title := "TITLE"
+play_games_services.showSavedGames(saved_games_screen_title, allow_add_button, allow_delete_button, max_saved_games_snapshots)
 
 #Godot callback	
 # If user clicked on add new snapshot button on the screen with all saved snapshots, below callback will be triggered:
