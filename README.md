@@ -53,7 +53,7 @@ if Engine.has_singleton("GodotPlayGamesServices"):
 	
   # Initialize plugin by calling init method and passing to it a boolean to enable/disable displaying game pop-ups
   
-  var enable_save_games := true # If you want to enable Saved Games functionality. true for enabling it. If enabled, it will require additional Google Drive API permission from the user.
+  var show_popups := true 
   play_games_services.init(show_popups)
   # For enabling saved games functionality use below initialization instead
   # play_games_services.initWithSavedGames(show_popups, "SavedGamesName")
