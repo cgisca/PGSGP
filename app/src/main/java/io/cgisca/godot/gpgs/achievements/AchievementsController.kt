@@ -45,6 +45,16 @@ class AchievementsController(
         }
     }
 
+    fun setAchievementSteps(achievementName: String, steps: Int) {
+        val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity)
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
+            Games.getAchievementsClient(activity, googleSignInAccount).setSteps(achievementName, steps)
+            achievementsListener.onAchievementStepsSet(achievementName)
+        } else {
+            achievementsListener.onAchievementStepsSettingFailed(achievementName)
+        }
+    }
+
     fun showAchievements() {
         val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity)
         if (connectionController.isConnected().first && googleSignInAccount != null) {

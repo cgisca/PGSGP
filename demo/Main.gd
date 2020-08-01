@@ -4,6 +4,7 @@ extends Control
 const UNLOCK_ACHIEVEMENT = "CgkIqt-jg_MWEAIQAQ"
 const REVEAL_ACHIEVEMENT = "CgkIqt-jg_MWEAIQAQ"
 const INCREMENT_ACHIEVEMENT = "CgkIqt-jg_MWEAIQAQ"
+const SET_ACHIEVEMENT_STEPS = "CgkIqt-jg_MWEAIQAQ"
 const LEADERBOARD_ID = "CgkIqt-jg_MWEAIQAQ"
 
 var play_games_services
@@ -23,6 +24,8 @@ func _ready():
 		play_games_services.connect("_on_achievement_revealing_failed", self, "_on_achievement_revealing_failed")
 		play_games_services.connect("_on_achievement_incremented", self, "_on_achievement_incremented")
 		play_games_services.connect("_on_achievement_incrementing_failed", self, "_on_achievement_incrementing_failed")
+		play_games_services.connect("_on_achievement_steps_set", self, "_on_achievement_steps_set")
+		play_games_services.connect("_on_achievement_steps_setting_failed", self, "_on_achievement_steps_setting_failed")
 		play_games_services.connect("_on_leaderboard_score_submitted", self, "_on_leaderboard_score_submitted")
 		play_games_services.connect("_on_leaderboard_score_submitting_failed", self, "_on_leaderboard_score_submitting_failed")
 		play_games_services.connect("_on_game_saved_success", self, "_on_game_saved_success")
@@ -61,6 +64,12 @@ func increment_achievement() -> void:
 	if play_games_services:
 		var step = 2
 		play_games_services.incrementAchievement(INCREMENT_ACHIEVEMENT, step) 
+
+
+func set_achievement_steps() -> void:
+	if play_games_services:
+		var steps = 5
+		play_games_services.setAchievementsSteps(SET_ACHIEVEMENT_STEPS, steps
 
 
 func show_achievements() -> void:
@@ -135,6 +144,12 @@ func _on_achievement_incremented(achievement: String) -> void:
 
 func _on_achievement_incrementing_failed(achievement: String) -> void:
 	print("Achievement %s incrementing failed"%achievement)
+
+func _on_achievement_steps_set(achievement: String) -> void:
+	print("Achievement %s steps set"%achievement)
+
+func _on_achievement_steps_setting_failed(achievement: String) -> void:
+	print("Achievement %s steps setting failed"%achievement)
 
 
 # Leaderboards callbacks
