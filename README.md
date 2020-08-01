@@ -128,6 +128,18 @@ func _on_achievement_incremented(achievement: String):
 func _on_achievement_incrementing_failed(achievement: String):
 	pass
 ```
+##### Set Achievement Steps
+```gdscript
+var steps = 3
+play_games_services.setAchievementSteps("ACHIEVEMENT_ID", steps)
+
+# Callbacks:
+func _on_achievement_steps_set(achievement: String):
+	pass
+
+func _on_achievement_steps_setting_failed(achievement: String):
+	pass
+```
 ##### Reveal Achievement
 ```gdscript
 play_games_services.revealAchievement("ACHIEVEMENT_ID")
