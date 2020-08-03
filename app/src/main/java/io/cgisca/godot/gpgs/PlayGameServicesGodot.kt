@@ -25,8 +25,6 @@ import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import java.math.BigInteger
-import java.util.concurrent.Callable
-import java.util.concurrent.FutureTask
 import java.util.Random
 
 class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsListener, EventsListener,
@@ -200,6 +198,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
 
     fun isSignedIn(): Boolean {
         return signInController.isSignedIn()
+    }
 
     fun showAchievements() {
         runOnUiThread {
