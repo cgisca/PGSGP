@@ -104,6 +104,10 @@ func _on_sign_out_success():
 func _on_sign_out_failed():
 	pass
 ```
+##### Check if signed in
+```gdscript
+var is_signed_in: boole = play_games_services.isSignedIn()
+```
 #### Achievements
 ##### Unlock Achievement
 ```gdscript

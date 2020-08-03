@@ -49,6 +49,12 @@ func sign_out() -> void:
 		play_games_services.signOut()
 
 
+func check_if_signed_in() -> void:
+	if play_games_services:
+		var is_signed_in: bool = play_games_services.isSignedIn()
+		print("Signed in: %s"%is_signed_in)	
+
+
 # Achievements methods
 func unlock_achievement() -> void:
 	if play_games_services:
@@ -188,6 +194,10 @@ func _on_SignInButton_pressed():
 func _on_SignOutButton_pressed():
 	sign_out()
 
+
+func _on_CheckIfSignedInButton_pressed():
+	check_if_signed_in()
+	
 
 func _on_SaveGameButton_pressed():
 	save_game()
