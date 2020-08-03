@@ -32,42 +32,50 @@ margin_bottom = 240.0
 rect_min_size = Vector2( 200, 100 )
 text = "Sign Out"
 
-[node name="SaveGameButton" type="Button" parent="VBoxContainer"]
+[node name="CheckIfSignedInButton" type="Button" parent="VBoxContainer"]
 margin_top = 280.0
 margin_right = 600.0
 margin_bottom = 380.0
 rect_min_size = Vector2( 200, 100 )
-text = "Save game"
+text = "Check If Signed In"
 
-[node name="ShowSavedGamesButton" type="Button" parent="VBoxContainer"]
+[node name="SaveGameButton" type="Button" parent="VBoxContainer"]
 margin_top = 420.0
 margin_right = 600.0
 margin_bottom = 520.0
 rect_min_size = Vector2( 200, 100 )
-text = "ShowSavedGames"
+text = "Save game"
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="ShowSavedGamesButton" type="Button" parent="VBoxContainer"]
 margin_top = 560.0
 margin_right = 600.0
 margin_bottom = 660.0
 rect_min_size = Vector2( 200, 100 )
-text = "Load saved game"
+text = "ShowSavedGames"
 
-[node name="ShowLeaderBoardsButton" type="Button" parent="VBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer"]
 margin_top = 700.0
 margin_right = 600.0
 margin_bottom = 800.0
-rect_min_size = Vector2( 0, 100 )
-text = "Show leaderboards"
+rect_min_size = Vector2( 200, 100 )
+text = "Load saved game"
 
-[node name="AchievementUnlockButton" type="Button" parent="VBoxContainer"]
+[node name="ShowLeaderBoardsButton" type="Button" parent="VBoxContainer"]
 margin_top = 840.0
 margin_right = 600.0
 margin_bottom = 940.0
 rect_min_size = Vector2( 0, 100 )
+text = "Show leaderboards"
+
+[node name="AchievementUnlockButton" type="Button" parent="VBoxContainer"]
+margin_top = 980.0
+margin_right = 600.0
+margin_bottom = 1080.0
+rect_min_size = Vector2( 0, 100 )
 text = "Unlock achievement"
 [connection signal="pressed" from="VBoxContainer/SignInButton" to="." method="_on_SignInButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/SignOutButton" to="." method="_on_SignOutButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/CheckIfSignedInButton" to="." method="_on_CheckIfSignedInButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/SaveGameButton" to="." method="_on_SaveGameButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/ShowSavedGamesButton" to="." method="_on_ShowSavedGamesButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_Button_pressed"]
