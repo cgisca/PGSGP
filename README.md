@@ -106,7 +106,7 @@ func _on_sign_out_failed():
 ```
 ##### Check if signed in
 ```gdscript
-var is_signed_in: boole = play_games_services.isSignedIn()
+var is_signed_in: bool = play_games_services.isSignedIn()
 ```
 #### Achievements
 ##### Unlock Achievement
