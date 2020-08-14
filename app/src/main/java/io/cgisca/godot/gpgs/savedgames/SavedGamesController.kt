@@ -21,6 +21,11 @@ class SavedGamesController(
 
     companion object {
         const val RC_SAVED_GAMES = 9009
+        const val NOT_CONNECTED = 1
+        const val NOT_SIGNED_IN = 2
+        const val WRITE_TASK_FAILED = 3
+        const val OPEN_SNAPSHOT_FAILURE = 4
+        const val ON_TASK_COMPLETE_FAILURE = 5
     }
 
     fun showSavedGamesUI(
@@ -52,18 +57,22 @@ class SavedGamesController(
             .setDescription(desc)
             .build()
         val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity)
-        if (connectionController.isConnected().first && googleSignInAccount != null) {
+        if (!connectionController.isConnected().first) {
+            savedGamesListener.onSavedGameFailed(NOT_CONNECTED)
+        }
+        else if (googleSignInAccount == null) {
+            savedGamesListener.onSavedGameFailed(NOT_SIGNED_IN)
+        }
+        else {
             val snapshotsClient = Games.getSnapshotsClient(activity, googleSignInAccount)
             val commitTask = snapshotsClient.commitAndClose(snapshot, metadataChange)
             commitTask.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     savedGamesListener.onSavedGameSuccess()
                 } else {
-                    savedGamesListener.onSavedGameFailed()
+                    savedGamesListener.onSavedGameFailed(WRITE_TASK_FAILED)
                 }
             }
-        } else {
-            savedGamesListener.onSavedGameFailed()
         }
     }
 
@@ -73,12 +82,19 @@ class SavedGamesController(
         description: String
     ) {
         val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity)
-        if (connectionController.isConnected().first && googleSignInAccount != null) {
+        if (! connectionController.isConnected().first) {
+            savedGamesListener.onSavedGameFailed(NOT_CONNECTED)
+        }
+        else if (googleSignInAccount == null) {
+            savedGamesListener.onSavedGameFailed(NOT_SIGNED_IN)
+        }
+        else {
             val snapshotsClient = Games.getSnapshotsClient(activity, googleSignInAccount)
             val conflictResolutionPolicy = SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED
-            snapshotsClient.open(gameName, true, conflictResolutionPolicy)
+            val createIfNotFound = true
+            snapshotsClient.open(gameName, createIfNotFound, conflictResolutionPolicy)
                 .addOnFailureListener {
-                    savedGamesListener.onSavedGameFailed()
+                    savedGamesListener.onSavedGameFailed(OPEN_SNAPSHOT_FAILURE)
                 }
                 .continueWith<Pair<Snapshot, ByteArray>>(
                     Continuation<DataOrConflict<Snapshot>, Pair<Snapshot, ByteArray>> { task ->
@@ -94,22 +110,27 @@ class SavedGamesController(
                         val data = task.result!!.second
                         writeSnapshot(snapshot, data, description)
                     } else {
-                        savedGamesListener.onSavedGameFailed()
+                        savedGamesListener.onSavedGameFailed(ON_TASK_COMPLETE_FAILURE)
                     }
                 }
-        } else {
-            savedGamesListener.onSavedGameFailed()
         }
     }
 
     fun loadSnapshot(gameName: String) {
         val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity)
-        if (connectionController.isConnected().first && googleSignInAccount != null) {
+        if (! connectionController.isConnected().first) {
+            savedGamesListener.onSavedGameLoadFailed(NOT_CONNECTED)
+        }
+        else if (googleSignInAccount == null) {
+            savedGamesListener.onSavedGameLoadFailed(NOT_SIGNED_IN)
+        }
+        else {
             val snapshotsClient = Games.getSnapshotsClient(activity, googleSignInAccount)
             val conflictResolutionPolicy = SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED
-            snapshotsClient.open(gameName, true, conflictResolutionPolicy)
+            val createIfNotFound = true
+            snapshotsClient.open(gameName, createIfNotFound, conflictResolutionPolicy)
                 .addOnFailureListener {
-                    savedGamesListener.onSavedGameLoadFailed()
+                    savedGamesListener.onSavedGameLoadFailed(OPEN_SNAPSHOT_FAILURE)
                 }
                 .continueWith<ByteArray>(Continuation { task ->
                     val snapshot = task.result
@@ -130,11 +151,9 @@ class SavedGamesController(
                             savedGamesListener.onSavedGameLoadSuccess(data)
                         }
                     } else {
-                        savedGamesListener.onSavedGameLoadFailed()
+                        savedGamesListener.onSavedGameLoadFailed(ON_TASK_COMPLETE_FAILURE)
                     }
                 }
-        } else {
-            savedGamesListener.onSavedGameLoadFailed()
         }
     }
 

@@ -67,9 +67,9 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         val SIGNAL_PLAYER_STATS_LOADED = SignalInfo("_on_player_stats_loaded", String::class.java)
         val SIGNAL_PLAYER_STATS_LOADED_FAILED = SignalInfo("_on_player_stats_loading_failed")
         val SIGNAL_SAVED_GAME_SUCCESS = SignalInfo("_on_game_saved_success")
-        val SIGNAL_SAVED_GAME_FAILED = SignalInfo("_on_game_saved_fail")
+        val SIGNAL_SAVED_GAME_FAILED = SignalInfo("_on_game_saved_fail", Int::class.javaObjectType)
         val SIGNAL_SAVED_GAME_LOAD_SUCCESS = SignalInfo("_on_game_load_success", String::class.java)
-        val SIGNAL_SAVED_GAME_LOAD_FAIL = SignalInfo("_on_game_load_fail")
+        val SIGNAL_SAVED_GAME_LOAD_FAIL = SignalInfo("_on_game_load_fail", Int::class.javaObjectType)
         val SIGNAL_SAVED_GAME_CREATE_SNAPSHOT = SignalInfo("_on_create_new_snapshot", String::class.java)
     }
 
@@ -354,12 +354,12 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         emitSignal(SIGNAL_SAVED_GAME_SUCCESS.name)
     }
 
-    override fun onSavedGameFailed() {
-        emitSignal(SIGNAL_SAVED_GAME_FAILED.name)
+    override fun onSavedGameFailed(statusCode: Int) {
+        emitSignal(SIGNAL_SAVED_GAME_FAILED.name, statusCode)
     }
 
-    override fun onSavedGameLoadFailed() {
-        emitSignal(SIGNAL_SAVED_GAME_LOAD_FAIL.name)
+    override fun onSavedGameLoadFailed(statusCode: Int) {
+        emitSignal(SIGNAL_SAVED_GAME_LOAD_FAIL.name, statusCode)
     }
 
     override fun onSavedGameLoadSuccess(data: String) {
