@@ -13,7 +13,6 @@ class SignInController(
     private var signInListener: SignInListener,
     private var connectionController: ConnectionController
 ) {
-
     companion object {
         const val RC_SIGN_IN = 77
     }
@@ -25,22 +24,27 @@ class SignInController(
     }
 
     fun signIn(googleSignInClient: GoogleSignInClient) {
+        val userProfile = UserProfile(null, null, null, null)
         val connection: Pair<Boolean, String> = connectionController.isConnected()
         if (connection.first) {
-            signInListener.onSignedInSuccessfully(connection.second)
+            signInListener.onSignedInSuccessfully(userProfile)
             enablePopUps()
         } else {
             googleSignInClient
                 .silentSignIn()
                 .addOnCompleteListener(activity) { task ->
                     if (task.isSuccessful) {
-                        val googleSignInAccount = task.result
-                        var accId = ""
-                        googleSignInAccount?.id?.let {
-                            accId = it
-                        }
 
-                        signInListener.onSignedInSuccessfully(accId)
+                        val googleSignInAccount = task.result
+                        if (googleSignInAccount != null) {
+                            userProfile.let {
+                                    it.displayName = googleSignInAccount.displayName
+                                    it.email = googleSignInAccount.email
+                                    it.token = googleSignInAccount.idToken
+                                    it.id = googleSignInAccount.id
+                            }
+                        }
+                        signInListener.onSignedInSuccessfully(userProfile)
                         enablePopUps()
                     } else {
                         val intent = googleSignInClient.signInIntent
@@ -51,6 +55,7 @@ class SignInController(
     }
 
     fun onSignInActivityResult(googleSignInResult: GoogleSignInResult?) {
+        val userProfile = UserProfile(null, null, null, null)
         if (googleSignInResult != null && googleSignInResult.isSuccess) {
             val googleSignInAccount = googleSignInResult.signInAccount
             var accId = ""
@@ -58,7 +63,7 @@ class SignInController(
                 accId = it
             }
             enablePopUps()
-            signInListener.onSignedInSuccessfully(accId)
+            signInListener.onSignedInSuccessfully(userProfile)
         } else {
             var statusCode = Int.MIN_VALUE
             googleSignInResult?.status?.let {

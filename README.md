@@ -53,8 +53,11 @@ if Engine.has_singleton("GodotPlayGamesServices"):
 	
   # Initialize plugin by calling init method and passing to it a boolean to enable/disable displaying game pop-ups
   
-  var show_popups := true 
-  play_games_services.init(show_popups)
+  var show_popups := true
+  var request_email := true
+  var request_profile := true
+  var request_token := "YOUR_CLIENT_ID"
+  play_games_services.init(show_popups, request_email, request_profile, request_token)
   # For enabling saved games functionality use below initialization instead
   # play_games_services.initWithSavedGames(show_popups, "SavedGamesName")
   
@@ -86,7 +89,7 @@ After what plugin was initialized you can use supported features
 play_games_services.signIn()
 
 # Callbacks:
-func _on_sign_in_success(account_id: String) -> void:
+func _on_sign_in_success(account_json: String) -> void:
 	pass
   
 func _on_sign_in_failed(error_code: int) -> void:
