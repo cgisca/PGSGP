@@ -25,9 +25,9 @@ class SignInController(
 
     fun signIn(googleSignInClient: GoogleSignInClient) {
         val userProfile = UserProfile(null, null, null, null)
-        val connection: Pair<Boolean, String> = connectionController.isConnected()
+        val connection: Pair<Boolean, UserProfile> = connectionController.isConnected()
         if (connection.first) {
-            signInListener.onSignedInSuccessfully(userProfile)
+            signInListener.onSignedInSuccessfully(connection.second)
             enablePopUps()
         } else {
             googleSignInClient
@@ -58,9 +58,13 @@ class SignInController(
         val userProfile = UserProfile(null, null, null, null)
         if (googleSignInResult != null && googleSignInResult.isSuccess) {
             val googleSignInAccount = googleSignInResult.signInAccount
-            var accId = ""
-            googleSignInAccount?.id?.let {
-                accId = it
+            if (googleSignInAccount != null) {
+                userProfile.let {
+                    it.displayName = googleSignInAccount.displayName
+                    it.email = googleSignInAccount.email
+                    it.token = googleSignInAccount.idToken
+                    it.id = googleSignInAccount.id
+                }
             }
             enablePopUps()
             signInListener.onSignedInSuccessfully(userProfile)
