@@ -79,6 +79,8 @@ if Engine.has_singleton("GodotPlayGamesServices"):
   play_games_services.connect("_on_create_new_snapshot", self, "_on_create_new_snapshot") # name: String
   play_games_services.connect("_on_player_info_loaded", self, "_on_player_info_loaded")  # json_response: String
   play_games_services.connect("_on_player_info_loading_failed", self, "_on_player_info_loading_failed")
+  play_games_services.connect("_on_player_stats_loaded", self, "_on_player_stats_loaded")  # json_response: String
+  play_games_services.connect("_on_player_stats_loading_failed", self, "_on_player_stats_loading_failed")
 ```
 After what plugin was initialized you can use supported features
 #### Sign-in / Sign out
