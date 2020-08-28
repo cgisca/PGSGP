@@ -9,6 +9,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.drive.Drive
 import com.google.android.gms.games.SnapshotsClient
 import com.google.android.gms.games.snapshot.SnapshotMetadata
+import io.cgisca.godot.gpgs.accountinfo.PlayerInfoController
+import io.cgisca.godot.gpgs.accountinfo.PlayerInfoListener
 import io.cgisca.godot.gpgs.achievements.AchievementsController
 import io.cgisca.godot.gpgs.achievements.AchievementsListener
 import io.cgisca.godot.gpgs.events.EventsController
@@ -28,7 +30,7 @@ import java.math.BigInteger
 import java.util.Random
 
 class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsListener, EventsListener,
-    LeaderBoardsListener, SavedGamesListener, SignInListener, PlayerStatsListener {
+    LeaderBoardsListener, SavedGamesListener, SignInListener, PlayerStatsListener, PlayerInfoListener {
 
     private lateinit var connectionController: ConnectionController
     private lateinit var signInController: SignInController
@@ -36,6 +38,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
     private lateinit var leaderboardsController: LeaderboardsController
     private lateinit var eventsController: EventsController
     private lateinit var playerStatsController: PlayerStatsController
+    private lateinit var playerInfoController: PlayerInfoController
     private lateinit var savedGamesController: SavedGamesController
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -71,6 +74,8 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         val SIGNAL_SAVED_GAME_LOAD_SUCCESS = SignalInfo("_on_game_load_success", String::class.java)
         val SIGNAL_SAVED_GAME_LOAD_FAIL = SignalInfo("_on_game_load_fail")
         val SIGNAL_SAVED_GAME_CREATE_SNAPSHOT = SignalInfo("_on_create_new_snapshot", String::class.java)
+        val SIGNAL_PLAYER_INFO_LOADED = SignalInfo("_on_player_info_loaded", String::class.java)
+        val SIGNAL_PLAYER_INFO_LOADED_FAILED = SignalInfo("_on_player_info_loading_failed")
     }
 
     override fun getPluginName(): String {
@@ -98,7 +103,8 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
             "loadPlayerStats",
             "showSavedGames",
             "saveSnapshot",
-            "loadSnapshot"
+            "loadSnapshot",
+            "loadPlayerInfo"
         )
     }
 
@@ -129,7 +135,9 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
             SIGNAL_SAVED_GAME_FAILED,
             SIGNAL_SAVED_GAME_LOAD_SUCCESS,
             SIGNAL_SAVED_GAME_LOAD_FAIL,
-            SIGNAL_SAVED_GAME_CREATE_SNAPSHOT
+            SIGNAL_SAVED_GAME_CREATE_SNAPSHOT,
+            SIGNAL_PLAYER_INFO_LOADED,
+            SIGNAL_PLAYER_INFO_LOADED_FAILED
         )
     }
 
@@ -175,6 +183,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         leaderboardsController = LeaderboardsController(godot as Activity, this, connectionController)
         eventsController = EventsController(godot as Activity, this, connectionController)
         playerStatsController = PlayerStatsController(godot as Activity, this, connectionController)
+        playerInfoController = PlayerInfoController(godot as Activity, this, connectionController)
         savedGamesController = SavedGamesController(godot as Activity, this, connectionController)
 
         googleSignInClient = GoogleSignIn.getClient(godot as Activity, signInOptions)
@@ -290,6 +299,12 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         }
     }
 
+    fun loadPlayerInfo() {
+        runOnUiThread {
+            playerInfoController.fetchPlayerInfo()
+        }
+    }
+
     override fun onAchievementUnlocked(achievementName: String) {
         emitSignal(SIGNAL_ACHIEVEMENT_UNLOCKED.name, achievementName)
     }
@@ -392,5 +407,13 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
 
     override fun onPlayerStatsLoadingFailed() {
         emitSignal(SIGNAL_PLAYER_STATS_LOADED_FAILED.name)
+    }
+
+    override fun onPlayerInfoLoaded(response: String) {
+        emitSignal(SIGNAL_PLAYER_INFO_LOADED.name, response)
+    }
+
+    override fun onPlayerInfoLoadingFailed() {
+        emitSignal(SIGNAL_PLAYER_INFO_LOADED_FAILED.name)
     }
 }

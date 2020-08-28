@@ -33,6 +33,8 @@ func _ready():
 		play_games_services.connect("_on_game_load_success", self, "_on_game_load_success")
 		play_games_services.connect("_on_game_load_fail", self, "_on_game_load_fail")
 		play_games_services.connect("_on_create_new_snapshot", self, "_on_create_new_snapshot")
+		play_games_services.connect("_on_player_info_loaded", self, "_on_player_info_loaded")
+		play_games_services.connect("_on_player_info_loading_failed", self, "_on_player_info_loading_failed")
 	
 		play_games_services.init(true)
 #		play_games_services.initWithSavedGames(true, "SAVE_GAME_NAME") # Use this init if you want saved games feature to be enabled
@@ -75,7 +77,7 @@ func increment_achievement() -> void:
 func set_achievement_steps() -> void:
 	if play_games_services:
 		var steps = 5
-		play_games_services.setAchievementsSteps(SET_ACHIEVEMENT_STEPS, steps
+		play_games_services.setAchievementsSteps(SET_ACHIEVEMENT_STEPS, steps)
 
 
 func show_achievements() -> void:
@@ -116,6 +118,11 @@ func save_game() -> void:
 func show_saved_games() -> void:
 	if play_games_services:
 		play_games_services.showSavedGames("SNAPSHOT_NAME", true, true, 5)
+
+
+func load_player_info() -> void:
+	if play_games_services:
+		play_games_services.loadPlayerInfo()
 
 
 # CALLBACKS
@@ -184,6 +191,15 @@ func _on_game_load_fail():
 
 func _on_create_new_snapshot(name:String):
 	print("Create new snapshot %s"%name)
+
+
+# Player Info Callbacks
+func _on_player_info_loaded(player_info: String):
+	var player_info_dictionary: Dictionary = parse_json(player_info)
+	print(player_info_dictionary)
+
+func _on_player_info_loading_failed():
+	print("Player info loading failed")
 
 
 ###### Buttons callbacks #############

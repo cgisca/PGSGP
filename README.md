@@ -3,7 +3,7 @@ This is an Android Play Games Services plugin for Godot Game Engine 3.2.2+.
 
 [![Android](https://img.shields.io/badge/Platform-Android-brightgreen.svg)](https://developer.android.com)
 [![Godot](https://img.shields.io/badge/Godot%20Engine-3.2.2-blue.svg)](https://github.com/godotengine/godot/)
-[![PGS](https://img.shields.io/badge/Play%20Games%20Services-19.0.0-green.svg)](https://developers.google.com/games/services/android/quickstart)
+[![PGS](https://img.shields.io/badge/Play%20Games%20Services-20.0.1-green.svg)](https://developers.google.com/games/services/android/quickstart)
 [![MIT license](https://img.shields.io/badge/License-MIT-yellowgreen.svg)](https://lbesson.mit-license.org/)
 
 
@@ -16,6 +16,7 @@ If you want to use the old plugin version visit [Old README file](https://github
 - Leaderboards
 - Events
 - Player Stats
+- Player Info
 - Saved Games
 
 ## Getting started
@@ -239,6 +240,41 @@ func _on_player_stats_loaded(stats):
 	stats_dictionary["spend_percentile"] # Spend percentile
 
 func _on_player_stats_loading_failed():
+	pass
+```
+#### Player Info
+```gdscript
+play_games_services.loadPlayerInfo()
+
+# Callbacks:	
+func _on_player_info_loaded(info):
+	var info_dictionary: Dictionary = parse_json(info)
+	# Using below keys you can retrieve player’s info
+	info_dictionary["display_name"]
+	info_dictionary["name"]
+	info_dictionary["title"]
+	info_dictionary["player_id"]
+	info_dictionary["hi_res_image_url"]
+	info_dictionary["icon_image_url"]
+	info_dictionary["banner_image_landscape_url"] 
+	info_dictionary["banner_image_portrait_url"]
+    # Also you can get level info for the player
+    var level_info_dictionary = info_dictionary["level_info"]
+	level_info_dictionary["current_xp_total"]
+	level_info_dictionary["last_level_up_timestamp"]
+    
+    var current_level_dictionary = level_info_dictionary["current_level"]
+    current_level_dictionary["level_number"]
+    current_level_dictionary["max_xp"]
+    current_level_dictionary["min_xp"]
+
+    var next_level_dictionary = level_info_dictionary["next_level"]
+    next_level_dictionary["level_number"]
+    next_level_dictionary["max_xp"]
+    next_level_dictionary["min_xp"]
+    
+
+func _on_player_info_loading_failed():
 	pass
 ```
 #### Saved Games
