@@ -77,7 +77,8 @@ if Engine.has_singleton("GodotPlayGamesServices"):
   play_games_services.connect("_on_game_load_success", self, "_on_game_load_success") # data: String
   play_games_services.connect("_on_game_load_fail", self, "_on_game_load_fail") # no params
   play_games_services.connect("_on_create_new_snapshot", self, "_on_create_new_snapshot") # name: String
-	
+  play_games_services.connect("_on_player_info_loaded", self, "_on_player_info_loaded")  # json_response: String
+  play_games_services.connect("_on_player_info_loading_failed", self, "_on_player_info_loading_failed")
 ```
 After what plugin was initialized you can use supported features
 #### Sign-in / Sign out
@@ -107,7 +108,7 @@ func _on_sign_out_failed():
 ```
 ##### Check if signed in
 ```gdscript
-var is_signed_in: boole = play_games_services.isSignedIn()
+var is_signed_in: bool = play_games_services.isSignedIn()
 ```
 #### Achievements
 ##### Unlock Achievement
