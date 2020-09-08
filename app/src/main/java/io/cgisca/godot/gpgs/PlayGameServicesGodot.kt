@@ -59,6 +59,8 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         val SIGNAL_ACHIEVEMENT_STEPS_SET = SignalInfo("_on_achievement_steps_set", String::class.java)
         val SIGNAL_ACHIEVEMENT_STEPS_SET_FAILED =
             SignalInfo("_on_achievement_steps_setting_failed", String::class.java)
+        val SIGNAL_ACHIEVEMENT_INFO_LOAD = SignalInfo("_on_achievement_info_loaded", String::class.java)
+        val SIGNAL_ACHIEVEMENT_INFO_LOAD_FAILED = SignalInfo("_on_achievement_info_load_failed", String::class.java)
         val SIGNAL_LEADERBOARD_SCORE_SUBMITTED = SignalInfo("_on_leaderboard_score_submitted", String::class.java)
         val SIGNAL_LEADERBOARD_SCORE_SUBMITTED_FAILED =
             SignalInfo("_on_leaderboard_score_submitting_failed", String::class.java)
@@ -94,6 +96,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
             "revealAchievement",
             "incrementAchievement",
             "setAchievementSteps",
+            "loadAchievementInfo",
             "showLeaderBoard",
             "showAllLeaderBoards",
             "submitLeaderBoardScore",
@@ -122,6 +125,8 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
             SIGNAL_ACHIEVEMENT_INCREMENTED_FAILED,
             SIGNAL_ACHIEVEMENT_STEPS_SET,
             SIGNAL_ACHIEVEMENT_STEPS_SET_FAILED,
+            SIGNAL_ACHIEVEMENT_INFO_LOAD,
+            SIGNAL_ACHIEVEMENT_INFO_LOAD_FAILED,
             SIGNAL_LEADERBOARD_SCORE_SUBMITTED,
             SIGNAL_LEADERBOARD_SCORE_SUBMITTED_FAILED,
             SIGNAL_EVENT_SUBMITTED,
@@ -239,6 +244,12 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         }
     }
 
+    fun loadAchievementInfo(forceReload: Boolean) {
+        runOnUiThread {
+            achievementsController.loadAchievementInfo(forceReload)
+        }
+    }
+
     fun showLeaderBoard(leaderBoardId: String) {
         runOnUiThread {
             leaderboardsController.showLeaderboard(leaderBoardId)
@@ -335,6 +346,14 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
 
     override fun onAchievementStepsSettingFailed(achievementName: String) {
         emitSignal(SIGNAL_ACHIEVEMENT_STEPS_SET_FAILED.name, achievementName)
+    }
+
+    override fun onAchievementInfoLoaded(achievementsJson: String) {
+        emitSignal(SIGNAL_ACHIEVEMENT_INFO_LOAD.name, achievementsJson)
+    }
+
+    override fun onAchievementInfoLoadingFailed() {
+        emitSignal(SIGNAL_ACHIEVEMENT_INFO_LOAD_FAILED.name)
     }
 
     override fun onEventSubmitted(eventId: String) {
