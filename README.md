@@ -39,7 +39,7 @@ Before using this plugin please follow instructions on [Setting Up Google Play G
 <resources>
     	<string name="app_id">ADD_YOUR_APP_ID</string>
 </resources>
-``` 
+```
 Replace ADD_YOUR_APP_ID with the app id that was generated after following instructions on [Setting Up Google Play Games Services](https://developers.google.com/games/services/console/enabling)
 
 Check demo project. In order demo project to work, replace <string name="app_id">ADD_YOUR_APP_ID</string> with your own app id, and in Main.gd add your ids for achievements and leaderboards.
@@ -70,6 +70,8 @@ if Engine.has_singleton("GodotPlayGamesServices"):
   play_games_services.connect("_on_achievement_revealing_failed", self, "_on_achievement_revealing_failed") # achievement: String
   play_games_services.connect("_on_achievement_incremented", self, "_on_achievement_incremented") # achievement: String
   play_games_services.connect("_on_achievement_incrementing_failed", self, "_on_achievement_incrementing_failed") # achievement: String
+  play_games_services.connect("_on_achievement_info_loaded", self, "_on_achievement_info_loaded") # achievements_json : String
+  play_games_services.connect("_on_achievement_info_load_failed", self, "_on_achievement_info_load_failed")
   play_games_services.connect("_on_leaderboard_score_submitted", self, "_on_leaderboard_score_submitted") # leaderboard_id: String
   play_games_services.connect("_on_leaderboard_score_submitting_failed", self, "_on_leaderboard_score_submitting_failed") # leaderboard_id: String
   play_games_services.connect("_on_game_saved_success", self, "_on_game_saved_success") # no params
@@ -162,6 +164,32 @@ func _on_achievement_revealing_failed(achievement: String):
 ##### Show Achievements List
 ```gdscript
 play_games_services.showAchievements()
+```
+##### Load Achievement info
+```gdscript
+play_games_services.loadAchievementInfo(false) # forceReload
+
+# Callbacks:
+func _on_achievement_info_load_failed(event_id: String):
+	pass
+
+func _on_achievement_info_loaded(achievements_json: String):
+	var achievements = parse_json(achievements_json)
+
+	# The returned JSON contains an array of achievement info items.
+	# Use the following keys to access the fields
+	for a in achievements:
+		a["id"] # Achievement ID
+		a["name"]
+		a["description"]
+		a["state"] # unlocked=0, revealed=1, hidden=2 (for the current player)
+		a["type"] # standard=0, incremental=1
+		a["xp"] # Experience gain when unlocked
+
+		# Steps only available for incremental achievements
+		if a["type"] == 1:
+			a["current_steps"] # Users current progress
+			a["total_steps"] # Total steps to unlock achievement
 ```
 #### Leaderboards
 ##### Submit leaderboard score
