@@ -9,4 +9,6 @@ interface AchievementsListener {
     fun onAchievementIncrementingFailed(achievementName: String)
     fun onAchievementStepsSet(achievementName: String)
     fun onAchievementStepsSettingFailed(achievementName: String)
+    fun onAchievementInfoLoaded(response: String)
+    fun onAchievementInfoLoadingFailed()
 }
