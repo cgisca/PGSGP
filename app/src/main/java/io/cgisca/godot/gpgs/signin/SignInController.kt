@@ -1,6 +1,7 @@
 package io.cgisca.godot.gpgs.signin
 
 import android.app.Activity
+import android.util.Log
 import android.util.Pair
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -28,9 +29,11 @@ class SignInController(
         val userProfile = UserProfile(null, null, null, null)
         val connection: Pair<Boolean, UserProfile> = connectionController.isConnected()
         if (connection.first) {
+            Log.i("godot","Using cached signin data")
             signInListener.onSignedInSuccessfully(connection.second)
             enablePopUps()
         } else {
+            Log.i("godot","Using new signin data")
             googleSignInClient
                 .silentSignIn()
                 .addOnCompleteListener(activity) { task ->
