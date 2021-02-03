@@ -6,7 +6,8 @@ import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.drive.Drive
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.games.SnapshotsClient
 import com.google.android.gms.games.snapshot.SnapshotMetadata
 import io.cgisca.godot.gpgs.accountinfo.PlayerInfoController
@@ -176,7 +177,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         this.saveGameName = saveGameName
         val signInOptions = if (enableSaveGamesFunctionality) {
             val signInOptionsBuilder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-            signInOptionsBuilder.requestScopes(Drive.SCOPE_APPFOLDER).requestId()
+            signInOptionsBuilder.requestScopes(Scope(Scopes.DRIVE_APPFOLDER))
             signInOptionsBuilder.build()
         } else {
             GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
