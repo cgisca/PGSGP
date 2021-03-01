@@ -2,6 +2,8 @@ package io.cgisca.godot.gpgs
 
 import android.app.Activity
 import android.content.Intent
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -86,6 +88,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
 
     override fun getPluginMethods(): MutableList<String> {
         return mutableListOf(
+            "isGooglePlayServicesAvailable",
             "init",
             "initWithSavedGames",
             "signIn",
@@ -162,6 +165,11 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
                 }
             }
         }
+    }
+
+    fun isGooglePlayServicesAvailable() : Boolean {
+        val result: Int = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(godot as Activity)
+        return result == ConnectionResult.SUCCESS
     }
 
     fun init(enablePopups: Boolean) {
