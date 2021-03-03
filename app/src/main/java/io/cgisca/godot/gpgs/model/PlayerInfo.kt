@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class PlayerInfo(
     @SerializedName("player_id") val playerId: String,
     @SerializedName("display_name") val displayName: String,
-    val name: String,
+    val name: String?,
     @SerializedName("icon_image_url") val iconImageUrl: String?,
     @SerializedName("hi_res_image_url") val hiResImageUrl: String?,
     val title: String?,
