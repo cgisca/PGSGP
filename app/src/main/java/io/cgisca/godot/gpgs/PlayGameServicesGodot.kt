@@ -10,6 +10,7 @@ import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.games.SnapshotsClient
 import com.google.android.gms.games.snapshot.SnapshotMetadata
+import com.google.gson.Gson
 import io.cgisca.godot.gpgs.accountinfo.PlayerInfoController
 import io.cgisca.godot.gpgs.accountinfo.PlayerInfoListener
 import io.cgisca.godot.gpgs.achievements.AchievementsController
@@ -22,6 +23,7 @@ import io.cgisca.godot.gpgs.savedgames.SavedGamesController
 import io.cgisca.godot.gpgs.savedgames.SavedGamesListener
 import io.cgisca.godot.gpgs.signin.SignInController
 import io.cgisca.godot.gpgs.signin.SignInListener
+import io.cgisca.godot.gpgs.signin.UserProfile
 import io.cgisca.godot.gpgs.stats.PlayerStatsController
 import io.cgisca.godot.gpgs.stats.PlayerStatsListener
 import org.godotengine.godot.Godot
@@ -165,22 +167,30 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         }
     }
 
-    fun init(enablePopups: Boolean) {
-        initialize(false, enablePopups, "DefaultGame")
+    fun init(enablePopups: Boolean, requestEmail: Boolean, requestProfile: Boolean, requestToken: String) {
+        initialize(false, enablePopups, "DefaultGame", requestEmail, requestProfile, requestToken)
     }
 
-    fun initWithSavedGames(enablePopups: Boolean, saveGameName: String) {
-        initialize(true, enablePopups, saveGameName)
+    fun initWithSavedGames(enablePopups: Boolean, saveGameName: String, requestEmail: Boolean, requestProfile: Boolean, requestToken: String) {
+        initialize(true, enablePopups, saveGameName, requestEmail, requestProfile, requestToken)
     }
 
-    private fun initialize(enableSaveGamesFunctionality: Boolean, enablePopups: Boolean, saveGameName: String) {
+    private fun initialize(enableSaveGamesFunctionality: Boolean, enablePopups: Boolean, saveGameName: String,
+                           requestEmail: Boolean, requestProfile: Boolean, requestToken: String) {
         this.saveGameName = saveGameName
-        val signInOptions = if (enableSaveGamesFunctionality) {
+        val signInOptions = run {
             val signInOptionsBuilder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-            signInOptionsBuilder.requestScopes(Scope(Scopes.DRIVE_APPFOLDER))
+            if (enableSaveGamesFunctionality)
+                signInOptionsBuilder.requestScopes(Scope(Scopes.DRIVE_APPFOLDER))
+            if (requestToken.isNotEmpty()) {
+                signInOptionsBuilder.requestIdToken(requestToken)
+            }
+            if (requestEmail)
+                signInOptionsBuilder.requestEmail()
+            if (requestProfile)
+                signInOptionsBuilder.requestProfile()
+            signInOptionsBuilder.requestId()
             signInOptionsBuilder.build()
-        } else {
-            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
         }
 
         connectionController = ConnectionController(godot as Activity, signInOptions)
@@ -405,8 +415,8 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         emitSignal(SIGNAL_SAVED_GAME_CREATE_SNAPSHOT.name, currentSaveName)
     }
 
-    override fun onSignedInSuccessfully(accountId: String) {
-        emitSignal(SIGNAL_SIGN_IN_SUCCESSFUL.name, accountId)
+    override fun onSignedInSuccessfully(userProfile: UserProfile) {
+        emitSignal(SIGNAL_SIGN_IN_SUCCESSFUL.name, Gson().toJson(userProfile))
     }
 
     override fun onSignInFailed(statusCode: Int) {
