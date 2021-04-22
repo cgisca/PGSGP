@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('godot-lib.3.2.3.stable.release.aar'))

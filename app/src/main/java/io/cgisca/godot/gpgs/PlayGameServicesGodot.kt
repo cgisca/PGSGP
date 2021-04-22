@@ -193,16 +193,16 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
             signInOptionsBuilder.build()
         }
 
-        connectionController = ConnectionController(godot as Activity, signInOptions)
-        signInController = SignInController(godot as Activity, this, connectionController)
-        achievementsController = AchievementsController(godot as Activity, this, connectionController)
-        leaderboardsController = LeaderboardsController(godot as Activity, this, connectionController)
-        eventsController = EventsController(godot as Activity, this, connectionController)
-        playerStatsController = PlayerStatsController(godot as Activity, this, connectionController)
-        playerInfoController = PlayerInfoController(godot as Activity, this, connectionController)
-        savedGamesController = SavedGamesController(godot as Activity, this, connectionController)
+        connectionController = ConnectionController(godot.activity as Activity, signInOptions)
+        signInController = SignInController(godot.activity as Activity, this, connectionController)
+        achievementsController = AchievementsController(godot.activity as Activity, this, connectionController)
+        leaderboardsController = LeaderboardsController(godot.activity as Activity, this, connectionController)
+        eventsController = EventsController(godot.activity as Activity, this, connectionController)
+        playerStatsController = PlayerStatsController(godot.activity as Activity, this, connectionController)
+        playerInfoController = PlayerInfoController(godot.activity as Activity, this, connectionController)
+        savedGamesController = SavedGamesController(godot.activity as Activity, this, connectionController)
 
-        googleSignInClient = GoogleSignIn.getClient(godot as Activity, signInOptions)
+        googleSignInClient = GoogleSignIn.getClient(godot.activity as Activity, signInOptions)
 
         runOnUiThread {
             signInController.setShowPopups(enablePopups)
