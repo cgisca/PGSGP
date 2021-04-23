@@ -91,6 +91,13 @@ if Engine.has_singleton("GodotPlayGamesServices"):
   play_games_services.connect("_on_player_stats_loading_failed", self, "_on_player_stats_loading_failed")
 ```
 After what plugin was initialized you can use supported features
+
+#### Check Google services availability on device
+
+```gdscript
+var is_gpgs_available: bool = play_game_services.isGooglePlayServicesAvailable()
+```
+
 #### Sign-in / Sign out
 ##### Sign-in
 
