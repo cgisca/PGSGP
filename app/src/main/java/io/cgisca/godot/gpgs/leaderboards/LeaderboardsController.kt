@@ -1,9 +1,15 @@
 package io.cgisca.godot.gpgs.leaderboards
 
 import android.app.Activity
+import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.games.Games
+import com.google.android.gms.games.leaderboard.LeaderboardVariant.COLLECTION_FRIENDS
+import com.google.android.gms.games.leaderboard.LeaderboardVariant.COLLECTION_PUBLIC
+import com.google.gson.Gson
 import io.cgisca.godot.gpgs.ConnectionController
+import io.cgisca.godot.gpgs.model.LeaderboardScore
+import java.util.Locale
 
 class LeaderboardsController(
     private val activity: Activity,
@@ -13,6 +19,51 @@ class LeaderboardsController(
 
     companion object {
         const val RC_LEADERBOARD_UI = 9004
+    }
+
+    fun retrieveLeaderboardScore(leaderboardId: String, span: Int, leaderboardCollection: String) {
+        val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity)
+
+        var collection = COLLECTION_PUBLIC
+
+        if (leaderboardCollection.toLowerCase(Locale.ROOT).contains("friends")) {
+            collection = COLLECTION_FRIENDS
+        }
+
+        if (connectionController.isConnected().first && googleSignInAccount != null) {
+            Log.i("godot", "-------------------\n\n THE LEADERBOARD:\n ${leaderboardId}\n\n")
+
+            Games.getLeaderboardsClient(activity, googleSignInAccount)
+                .loadPlayerCenteredScores(leaderboardId, span, collection, 1)
+                .addOnSuccessListener { lbScores ->
+//                    val scores = lbScores.get();
+//                    Log.i("godot", "-------------------\n\n THE RESULT:\n ${scores.scores[0].rank}\n\n")
+
+                    val leaderboardScore = LeaderboardScore (
+                        -1, 0, "Unknown"
+                    )
+
+                    if (lbScores != null) {
+                        val scores = lbScores.get();
+
+                        if (scores != null && scores.scores.count != 0) {
+                            leaderboardScore.rank = scores.scores[0].rank
+                            leaderboardScore.score = scores.scores[0].rawScore
+                            leaderboardScore.scoreHolder = scores.scores[0].scoreHolderDisplayName
+                        }
+                    }
+
+                    leaderBoardsListener.onCurrentPlayerLeaderBoardScoreLoaded(Gson().toJson(leaderboardScore))
+                }
+                .addOnFailureListener {reason ->
+                    Log.i("godot", "-------------------\n\n FAILURE REASON:\n ${reason}\n\n")
+                    Log.i("godot", "-------------------\n\n FAILURE REASON:\n ${reason.message}\n\n")
+
+                    leaderBoardsListener.onCurrentPlayerLeaderBoardScoreLoadingFailed()
+                }
+
+        }
+
     }
 
     fun submitScore(leaderboardId: String, score: Int) {
