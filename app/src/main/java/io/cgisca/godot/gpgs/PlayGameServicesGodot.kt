@@ -286,7 +286,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         }
     }
 
-    fun retrieveLeaderboardScore(leaderBoardId: String, span: Int, leaderboardCollection: String) {
+    fun retrieveLeaderboardScore(leaderBoardId: String, span: String, leaderboardCollection: String) {
         runOnUiThread {
 
             leaderboardsController.retrieveLeaderboardScore(leaderBoardId, span, leaderboardCollection)

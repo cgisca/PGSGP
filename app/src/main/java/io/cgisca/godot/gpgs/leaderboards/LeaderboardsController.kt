@@ -6,6 +6,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.leaderboard.LeaderboardVariant.COLLECTION_FRIENDS
 import com.google.android.gms.games.leaderboard.LeaderboardVariant.COLLECTION_PUBLIC
+import com.google.android.gms.games.leaderboard.LeaderboardVariant.TIME_SPAN_ALL_TIME
+import com.google.android.gms.games.leaderboard.LeaderboardVariant.TIME_SPAN_DAILY
+import com.google.android.gms.games.leaderboard.LeaderboardVariant.TIME_SPAN_WEEKLY
 import com.google.gson.Gson
 import io.cgisca.godot.gpgs.ConnectionController
 import io.cgisca.godot.gpgs.model.LeaderboardScore
@@ -21,7 +24,7 @@ class LeaderboardsController(
         const val RC_LEADERBOARD_UI = 9004
     }
 
-    fun retrieveLeaderboardScore(leaderboardId: String, span: Int, leaderboardCollection: String) {
+    fun retrieveLeaderboardScore(leaderboardId: String, span: String, leaderboardCollection: String) {
         val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity)
 
         var collection = COLLECTION_PUBLIC
@@ -30,11 +33,19 @@ class LeaderboardsController(
             collection = COLLECTION_FRIENDS
         }
 
+        var finalSpan = TIME_SPAN_ALL_TIME;
+
+        if (span.toLowerCase(Locale.ROOT).contains("weekly")) {
+            finalSpan = TIME_SPAN_WEEKLY
+        } else if (span.toLowerCase(Locale.ROOT).contains("daily")) {
+            finalSpan = TIME_SPAN_DAILY
+        }
+
         if (connectionController.isConnected().first && googleSignInAccount != null) {
             Log.i("godot", "-------------------\n\n THE LEADERBOARD:\n ${leaderboardId}\n\n")
 
             Games.getLeaderboardsClient(activity, googleSignInAccount)
-                .loadPlayerCenteredScores(leaderboardId, span, collection, 1)
+                .loadPlayerCenteredScores(leaderboardId, finalSpan, collection, 1)
                 .addOnSuccessListener { lbScores ->
 //                    val scores = lbScores.get();
 //                    Log.i("godot", "-------------------\n\n THE RESULT:\n ${scores.scores[0].rank}\n\n")

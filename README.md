@@ -78,6 +78,10 @@ if Engine.has_singleton("GodotPlayGamesServices"):
   play_games_services.connect("_on_achievement_incrementing_failed", self, "_on_achievement_incrementing_failed") # achievement: String
   play_games_services.connect("_on_achievement_info_loaded", self, "_on_achievement_info_loaded") # achievements_json : String
   play_games_services.connect("_on_achievement_info_load_failed", self, "_on_achievement_info_load_failed")
+  play_games_services.connect("_on_achievement_info_load_failed", self, "_on_achievement_info_load_failed")
+  play_games_services.connect("_on_achievement_info_load_failed", self, "_on_achievement_info_load_failed")
+  play_games_services.connect("_on_leaderboard_score_retrieved", self, "_on_leaderboard_score_retrieved") # playerstats: String (JSON)
+  play_games_services.connect("_on_leaderboard_score_retrieve_failed", self, "_on_leaderboard_score_retrieve_failed") 
   play_games_services.connect("_on_leaderboard_score_submitted", self, "_on_leaderboard_score_submitted") # leaderboard_id: String
   play_games_services.connect("_on_leaderboard_score_submitting_failed", self, "_on_leaderboard_score_submitting_failed") # leaderboard_id: String
   play_games_services.connect("_on_game_saved_success", self, "_on_game_saved_success") # no params
@@ -223,6 +227,7 @@ func _on_leaderboard_score_submitted(leaderboard_id: String):
 
 func _on_leaderboard_score_submitting_failed(leaderboard_id: String):
 	pass
+
 ```
 ##### Show leaderboard
 ```gdscript
@@ -232,6 +237,22 @@ play_games_services.showLeaderBoard("LEADERBOARD_ID")
 play_games_services.showAllLeaderBoards()
 ```
 
+##### Get player high score and rank
+```gdscript
+# Span can be: TIME_SPAN_DAILY, TIME_SPAN_WEEKLY, or TIME_SPAN_ALL_TIME
+# LeaderboardCollection can be:  COLLECTION_PUBLIC or COLLECTION_FRIENDS
+play_games_services.retrieveLeaderboardScore("LEADERBOARD_ID", "ALL_TIME", "ALL")
+
+func _on_leaderboard_score_retrieved(playerScore : String):
+    var score_dictionary: Dictionary = parse_json(playerScore)
+	# Using below keys you can retrieve data about a player’s in-game activity
+	score_dictionary["score"] # Player high score
+	score_dictionary["rank"] # Player rank
+    pass
+
+func _on_leaderboard_score_retrieve_failed():
+    pass
+```
 #### Events
 ##### Submit event
 ```gdscript
