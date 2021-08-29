@@ -45,32 +45,32 @@ class LeaderboardsController(
             Log.i("godot", "-------------------\n\n THE LEADERBOARD:\n ${leaderboardId}\n\n")
 
             Games.getLeaderboardsClient(activity, googleSignInAccount)
-                .loadPlayerCenteredScores(leaderboardId, finalSpan, collection, 1)
-                .addOnSuccessListener { lbScores ->
+                .loadCurrentPlayerLeaderboardScore(leaderboardId, finalSpan, collection)
+                .addOnSuccessListener { lbScore ->
 //                    val scores = lbScores.get();
-//                    Log.i("godot", "-------------------\n\n THE RESULT:\n ${scores.scores[0].rank}\n\n")
 
                     val leaderboardScore = LeaderboardScore (
                         -1, 0, "Unknown"
                     )
 
-                    if (lbScores != null) {
-                        val scores = lbScores.get();
+                    if (lbScore != null) {
+                        val score = lbScore.get();
+                        Log.i("godot", "-------------------\n\n THE RESULT:\n ${score.rank}\n\n")
 
-                        if (scores != null && scores.scores.count != 0) {
-                            leaderboardScore.rank = scores.scores[0].rank
-                            leaderboardScore.score = scores.scores[0].rawScore
-                            leaderboardScore.scoreHolder = scores.scores[0].scoreHolderDisplayName
+                        if (score != null) {
+                            leaderboardScore.rank = score.rank
+                            leaderboardScore.score = score.rawScore
+                            leaderboardScore.scoreHolder = score.scoreHolderDisplayName
                         }
                     }
 
-                    leaderBoardsListener.onCurrentPlayerLeaderBoardScoreLoaded(Gson().toJson(leaderboardScore))
+                    leaderBoardsListener.onCurrentPlayerLeaderBoardScoreLoaded(leaderboardId, Gson().toJson(leaderboardScore))
                 }
                 .addOnFailureListener {reason ->
                     Log.i("godot", "-------------------\n\n FAILURE REASON:\n ${reason}\n\n")
                     Log.i("godot", "-------------------\n\n FAILURE REASON:\n ${reason.message}\n\n")
 
-                    leaderBoardsListener.onCurrentPlayerLeaderBoardScoreLoadingFailed()
+                    leaderBoardsListener.onCurrentPlayerLeaderBoardScoreLoadingFailed(leaderboardId)
                 }
 
         }

@@ -66,8 +66,8 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
             SignalInfo("_on_achievement_steps_setting_failed", String::class.java)
         val SIGNAL_ACHIEVEMENT_INFO_LOAD = SignalInfo("_on_achievement_info_loaded", String::class.java)
         val SIGNAL_ACHIEVEMENT_INFO_LOAD_FAILED = SignalInfo("_on_achievement_info_load_failed", String::class.java)
-        val SIGNAL_LEADERBOARD_SCORE_RETRIEVED = SignalInfo("_on_leaderboard_score_retrieved", String::class.java)
-        val SIGNAL_LEADERBOARD_SCORE_RETRIEVED_FAILED = SignalInfo("_on_leaderboard_score_retrieve_failed")
+        val SIGNAL_LEADERBOARD_SCORE_RETRIEVED = SignalInfo("_on_leaderboard_score_retrieved", String::class.java, String::class.java)
+        val SIGNAL_LEADERBOARD_SCORE_RETRIEVED_FAILED = SignalInfo("_on_leaderboard_score_retrieve_failed", String::class.java)
         val SIGNAL_LEADERBOARD_SCORE_SUBMITTED = SignalInfo("_on_leaderboard_score_submitted", String::class.java)
         val SIGNAL_LEADERBOARD_SCORE_SUBMITTED_FAILED =
             SignalInfo("_on_leaderboard_score_submitting_failed", String::class.java)
@@ -407,12 +407,12 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
         emitSignal(SIGNAL_EVENTS_LOADED_FAILED.name)
     }
 
-    override fun onCurrentPlayerLeaderBoardScoreLoadingFailed() {
-        emitSignal(SIGNAL_LEADERBOARD_SCORE_RETRIEVED_FAILED.name)
+    override fun onCurrentPlayerLeaderBoardScoreLoadingFailed(leaderboardId: String) {
+        emitSignal(SIGNAL_LEADERBOARD_SCORE_RETRIEVED_FAILED.name, leaderboardId)
     }
 
-    override fun onCurrentPlayerLeaderBoardScoreLoaded(scoreJson: String) {
-        emitSignal(SIGNAL_LEADERBOARD_SCORE_RETRIEVED.name, scoreJson)
+    override fun onCurrentPlayerLeaderBoardScoreLoaded(leaderboardId: String, scoreJson: String) {
+        emitSignal(SIGNAL_LEADERBOARD_SCORE_RETRIEVED.name, leaderboardId, scoreJson)
     }
 
     override fun onLeaderBoardScoreSubmitted(leaderboardId: String) {

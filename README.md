@@ -243,14 +243,14 @@ play_games_services.showAllLeaderBoards()
 # LeaderboardCollection can be:  COLLECTION_PUBLIC or COLLECTION_FRIENDS
 play_games_services.retrieveLeaderboardScore("LEADERBOARD_ID", "ALL_TIME", "ALL")
 
-func _on_leaderboard_score_retrieved(playerScore : String):
+func _on_leaderboard_score_retrieved(leaderboardId : String, playerScore : String):
     var score_dictionary: Dictionary = parse_json(playerScore)
 	# Using below keys you can retrieve data about a player’s in-game activity
 	score_dictionary["score"] # Player high score
 	score_dictionary["rank"] # Player rank
     pass
 
-func _on_leaderboard_score_retrieve_failed():
+func _on_leaderboard_score_retrieve_failed(leaderboardId : String):
     pass
 ```
 #### Events
