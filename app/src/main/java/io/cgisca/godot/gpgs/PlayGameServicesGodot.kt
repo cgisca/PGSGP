@@ -23,6 +23,7 @@ import io.cgisca.godot.gpgs.signin.SignInController
 import io.cgisca.godot.gpgs.signin.SignInListener
 import io.cgisca.godot.gpgs.stats.PlayerStatsController
 import io.cgisca.godot.gpgs.stats.PlayerStatsListener
+import org.godotengine.godot.BuildConfig
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
@@ -81,7 +82,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
     }
 
     override fun getPluginName(): String {
-        return BuildConfig.LIBRARY_NAME
+        return BuildConfig.LIBRARY_PACKAGE_NAME
     }
 
     override fun getPluginMethods(): MutableList<String> {

@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    compileOnly project(":godot-lib.3.2.2.stable.release")
+    compileOnly project(":godot-lib.release")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.google.android.gms:play-services-games:20.0.1'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
