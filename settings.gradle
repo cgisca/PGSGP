@@ -1,1 +1,1 @@
-include ':app', ':godot-lib.3.2.2.stable.release'
+include ':app', ':godot-lib.release'
