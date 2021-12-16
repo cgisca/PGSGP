@@ -44,6 +44,33 @@ Replace ADD_YOUR_APP_ID with the app id that was generated after following instr
 
 Check demo project. In order demo project to work, replace <string name="app_id">ADD_YOUR_APP_ID</string> with your own app id, and in Main.gd add your ids for achievements and leaderboards.
 
+### Generate plugin .aar file
+
+If there is no release for your Godot version, you need to generate new plugin .aar file.  
+Follow these instruction: [ official documentation](https://docs.godotengine.org/en/stable/tutorials/plugins/android/android_plugin.html "documentation").
+
+In short follow these steps:
+
+1. Download [ AAR library for Android plugins](https://godotengine.org/download/windows "Godot download").
+
+2. Copy .aar file to *godot-lib.release/* and rename it to *godot-lib.release.aar*
+
+3. Compile the project:
+
+	Open command window and *cd* into *PGSGP* direcory and run command below
+	
+	* Windows:
+	
+		gradlew.bat assembleRelease
+		
+	* Linux:
+	
+		./gradlew assembleRelease
+	
+4. Copy the newly created .aar file to your plugin directory:
+
+*app/build/outputs/aar/GodotPlayGamesServices.release.aar* to *[your godot project]/android/plugins/*
+
 ### How to use
 First step is plugin initialization
 ```gdscript
