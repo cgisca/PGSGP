@@ -8,13 +8,13 @@ Google Play Games Services [Android plugin](https://docs.godotengine.org/en/stab
 
 
 ### Supported features:
-- Sign-in/Sign out
-- Achievements
-- Leaderboards
-- Events
-- Player Stats
-- Player Info
-- Saved Games
+- [Sign-in / Sign out](#sign-in--sign-out)
+- [Achievements](#achievements)
+- [Leaderboards](#leaderboards)
+- [Events](#events)
+- [Player Stats](#player-stats)
+- [Player Info](#player-info)
+- [Saved Games](#saved-games)
 
 *If you want to use the old plugin version (older than 3.2.2) visit [Old README file](https://github.com/cgisca/PGSGP/blob/master/README_OLD.md).*
 
