@@ -1,13 +1,10 @@
 # Google Play Games Services Plugin for Godot 
-This is an Android Play Games Services plugin for Godot Game Engine 3.2.3+. 
+Google Play Games Services [Android plugin](https://docs.godotengine.org/en/stable/tutorials/platform/android/android_plugin.html#android-plugin) for Godot 3.2.3 and newer Godot 3.x versions. 
 
 [![Android](https://img.shields.io/badge/Platform-Android-brightgreen.svg)](https://developer.android.com)
 [![Godot](https://img.shields.io/badge/Godot%20Engine-3.2.3-blue.svg)](https://github.com/godotengine/godot/)
 [![PGS](https://img.shields.io/badge/Play%20Games%20Services-22.0.1-green.svg)](https://developers.google.com/games/services/android/quickstart)
 [![MIT license](https://img.shields.io/badge/License-MIT-yellowgreen.svg)](https://lbesson.mit-license.org/)
-
-
-If you want to use the old plugin version visit [Old README file](https://github.com/cgisca/PGSGP/blob/master/README_OLD.md).
 
 
 ### Supported features:
@@ -19,9 +16,34 @@ If you want to use the old plugin version visit [Old README file](https://github
 - Player Info
 - Saved Games
 
+*If you want to use the old plugin version (older than 3.2.2) visit [Old README file](https://github.com/cgisca/PGSGP/blob/master/README_OLD.md).*
+
+---
+
+## About
+
+**This is a fork of the [PGSGP](https://github.com/cgisca/PGSGP) repo originally by [cgisca](https://github.com/cgisca), which I forked for my own use at [Gameka](https://github.com/Gameka-games).** Commits from forks of this repo, or the orignal repo and other forks are pulled into this repo as I continue to use this plugin. 
+
+### Contributors 
+
+[cgisca](https://github.com/cgisca) (original author) and other contributors in no particular order:
+- [Ozzadar](https://github.com/oneseedfruit/PGSGP/commits?author=Ozzadar) ([pulled from](https://github.com/mauville-technologies/PGSGP/commits?author=Ozzadar))
+- [DeleteSystem32](https://github.com/DeleteSystem32) ([pull request](https://github.com/cgisca/PGSGP/pull/60) | [commit](https://github.com/oneseedfruit/PGSGP/commit/acce3a2078e6839c3f59b71027b7480693b4d809) )
+- [Hamdiovish](https://github.com/Hamdiovish) ([pull request](https://github.com/cgisca/PGSGP/pull/48) | [commit](https://github.com/oneseedfruit/PGSGP/commit/bdf7ddd46d34e9c89981e5f88d1f330435eb3b45))
+- [spietika](https://github.com/oneseedfruit/PGSGP/commits?author=spietika) 
+- [dala00](https://github.com/oneseedfruit/PGSGP/commits?author=dala00) 
+- [RandomShaper](https://github.com/oneseedfruit/PGSGP/commits?author=RandomShaper)
+- [anisc](https://github.com/oneseedfruit/PGSGP/commits?author=anisc)
+
+
+---
+
 ## Getting started
 Before using this plugin please follow instructions on [Setting Up Google Play Games Services](https://developers.google.com/games/services/console/enabling) official guide.
-### Set up
+
+---
+
+## Set up
 - Download `GodotPlayGamesServices.release.aar` and `GodotPlayGamesServices.gdap` from [releases](https://github.com/cgisca/PGSGP/releases) page.
 - Move the plugin configuration file (`GodotPlayGamesServices.gdap`) and the binary (`GodotPlayGamesServices.release.aar`) downloaded from the previous step to the Godot project's res://android/plugins directory.
 - Enable plugin by accessing `Project` -> `Export`, Plugins section. Follow the [image](https://docs.godotengine.org/en/stable/_images/android_export_preset_plugins_section.png).
@@ -44,7 +66,9 @@ Replace ADD_YOUR_APP_ID with the app id that was generated after following instr
 
 Check demo project. In order demo project to work, replace <string name="app_id">ADD_YOUR_APP_ID</string> with your own app id, and in Main.gd add your ids for achievements and leaderboards.
 
-### How to use
+---
+
+## How to use
 First step is plugin initialization
 ```gdscript
 var play_games_services
@@ -96,14 +120,18 @@ if Engine.has_singleton("GodotPlayGamesServices"):
 ```
 After what plugin was initialized you can use supported features
 
-#### Check Google services availability on device
+---
+
+## Check Google services availability on device
 
 ```gdscript
 var is_gpgs_available: bool = play_game_services.isGooglePlayServicesAvailable()
 ```
 
-#### Sign-in / Sign out
-##### Sign-in
+---
+
+## Sign-in / Sign out
+### Sign-in
 
 ```gdscript
 play_games_services.signIn()
@@ -123,7 +151,7 @@ func _on_sign_in_failed(error_code: int) -> void:
 	pass
 
 ```
-##### Sign out
+### Sign out
 ```gdscript
 play_games_services.signOut()
 
@@ -134,12 +162,15 @@ func _on_sign_out_success():
 func _on_sign_out_failed():
 	pass
 ```
-##### Check if signed in
+### Check if signed in
 ```gdscript
 var is_signed_in: bool = play_games_services.isSignedIn()
 ```
-#### Achievements
-##### Unlock Achievement
+
+---
+
+## Achievements
+### Unlock Achievement
 ```gdscript
 play_games_services.unlockAchievement("ACHIEVEMENT_ID")
 
@@ -150,7 +181,7 @@ func _on_achievement_unlocked(achievement: String):
 func _on_achievement_unlocking_failed(achievement: String):
 	pass
 ```
-##### Increment Achievement
+### Increment Achievement
 ```gdscript
 var step = 1
 play_games_services.incrementAchievement("ACHIEVEMENT_ID", step)
@@ -162,7 +193,7 @@ func _on_achievement_incremented(achievement: String):
 func _on_achievement_incrementing_failed(achievement: String):
 	pass
 ```
-##### Set Achievement Steps
+### Set Achievement Steps
 ```gdscript
 var steps = 3
 play_games_services.setAchievementSteps("ACHIEVEMENT_ID", steps)
@@ -174,7 +205,7 @@ func _on_achievement_steps_set(achievement: String):
 func _on_achievement_steps_setting_failed(achievement: String):
 	pass
 ```
-##### Reveal Achievement
+### Reveal Achievement
 ```gdscript
 play_games_services.revealAchievement("ACHIEVEMENT_ID")
 
@@ -185,11 +216,11 @@ func _on_achievement_revealed(achievement: String):
 func _on_achievement_revealing_failed(achievement: String):
 	pass
 ```
-##### Show Achievements List
+### Show Achievements List
 ```gdscript
 play_games_services.showAchievements()
 ```
-##### Load Achievement info
+### Load Achievement info
 ```gdscript
 play_games_services.loadAchievementInfo(false) # forceReload
 
@@ -215,8 +246,11 @@ func _on_achievement_info_loaded(achievements_json: String):
 			a["current_steps"] # Users current progress
 			a["total_steps"] # Total steps to unlock achievement
 ```
-#### Leaderboards
-##### Submit leaderboard score
+
+---
+
+## Leaderboards
+### Submit leaderboard score
 ```gdscript
 var score = 1234
 play_games_services.submitLeaderBoardScore("LEADERBOARD_ID", score)
@@ -229,7 +263,7 @@ func _on_leaderboard_score_submitting_failed(leaderboard_id: String):
 	pass
 
 ```
-##### Show leaderboard
+### Show leaderboard
 ```gdscript
 play_games_services.showLeaderBoard("LEADERBOARD_ID")
 
@@ -237,7 +271,7 @@ play_games_services.showLeaderBoard("LEADERBOARD_ID")
 play_games_services.showAllLeaderBoards()
 ```
 
-##### Get player high score and rank
+### Get player high score and rank
 ```gdscript
 # Span can be: TIME_SPAN_DAILY, TIME_SPAN_WEEKLY, or TIME_SPAN_ALL_TIME
 # LeaderboardCollection can be:  COLLECTION_PUBLIC or COLLECTION_FRIENDS
@@ -253,8 +287,11 @@ func _on_leaderboard_score_retrieved(leaderboardId : String, playerScore : Strin
 func _on_leaderboard_score_retrieve_failed(leaderboardId : String):
     pass
 ```
-#### Events
-##### Submit event
+
+---
+
+## Events
+### Submit event
 ```gdscript
 var increment_by := 2
 play_games_services.submitEvent("EVENT_ID", increment_by)
@@ -266,7 +303,7 @@ func _on_event_submitted(event_id: String):
 func _on_event_submitted_failed(event_id: String):
 	pass
 ```
-##### Load events
+### Load events
 ```gdscript
 # Load all events
 play_games_services.loadEvents()
@@ -295,7 +332,10 @@ func _on_events_loading_failed():
 	pass
 
 ```
-#### Player Stats
+
+---
+
+## Player Stats
 ```gdscript
 var force_refresh := true # If true, this call will clear any locally cached data and attempt to fetch the latest data from the server.
 play_games_services.loadPlayerStats(force_refresh)
@@ -314,7 +354,10 @@ func _on_player_stats_loaded(stats):
 func _on_player_stats_loading_failed():
 	pass
 ```
-#### Player Info
+
+---
+
+## Player Info
 ```gdscript
 play_games_services.loadPlayerInfo()
 
@@ -349,8 +392,11 @@ func _on_player_info_loaded(info):
 func _on_player_info_loading_failed():
 	pass
 ```
-#### Saved Games
-##### Save game snapshot
+
+---
+
+## Saved Games
+### Save game snapshot
 ```gdscript
 var data_to_save: Dictionary = {
 		"name": "John", 
@@ -367,7 +413,7 @@ func _on_game_saved_success():
 func _on_game_saved_fail():
 	pass
 ```
-##### Load game snapshot
+### Load game snapshot
 ```gdscript
 play_games_services.loadSnapshot("SNAPSHOT_NAME")
 
@@ -382,7 +428,7 @@ func _on_game_load_success(data):
 func _on_game_load_fail():
 	pass
 ```
-##### Show saved snapshots screen
+### Show saved snapshots screen
 ```gdscript
 var allow_add_button := true
 var allow_delete_button := true
@@ -402,6 +448,9 @@ func _on_create_new_snapshot(name):
 	play_games_services.save_snapshot(name, to_json(game_data_to_save), "DESCRIPTION")
 
 ```
+
+---
+
 ## Troubleshooting
 Check `adb logcat` for debuging.
 To filter only Godot messages use next command:
