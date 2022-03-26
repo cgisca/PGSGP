@@ -29,15 +29,15 @@ class LeaderboardsController(
 
         var collection = COLLECTION_PUBLIC
 
-        if (leaderboardCollection.toLowerCase(Locale.ROOT).contains("friends")) {
+        if (leaderboardCollection.lowercase(Locale.ROOT).contains("friends")) {
             collection = COLLECTION_FRIENDS
         }
 
         var finalSpan = TIME_SPAN_ALL_TIME;
 
-        if (span.toLowerCase(Locale.ROOT).contains("weekly")) {
+        if (span.lowercase(Locale.ROOT).contains("weekly")) {
             finalSpan = TIME_SPAN_WEEKLY
-        } else if (span.toLowerCase(Locale.ROOT).contains("daily")) {
+        } else if (span.lowercase(Locale.ROOT).contains("daily")) {
             finalSpan = TIME_SPAN_DAILY
         }
 
@@ -55,7 +55,9 @@ class LeaderboardsController(
 
                     if (lbScore != null) {
                         val score = lbScore.get();
-                        Log.i("godot", "-------------------\n\n THE RESULT:\n ${score.rank}\n\n")
+                        if (score != null) {
+                            Log.i("godot", "-------------------\n\n THE RESULT:\n ${score.rank}\n\n")
+                        }
 
                         if (score != null) {
                             leaderboardScore.rank = score.rank

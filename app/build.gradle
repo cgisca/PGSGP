@@ -1,14 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "30.0.1"
+    compileSdkVersion 32
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
     }
@@ -34,11 +33,11 @@ android {
 }
 
 dependencies {
-    compileOnly project(":godot-lib")
+    compileOnly fileTree(dir:"libs", include:["godot-lib.aar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'com.google.android.gms:play-services-games:21.0.0'
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.android.gms:play-services-games:22.0.1'
+    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     testImplementation 'junit:junit:4.13.2'
 }

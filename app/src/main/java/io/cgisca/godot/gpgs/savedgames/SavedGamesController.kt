@@ -47,7 +47,9 @@ class SavedGamesController(
         data: ByteArray?,
         desc: String
     ) {
-        snapshot.snapshotContents.writeBytes(data)
+        if (data != null) {
+            snapshot.snapshotContents.writeBytes(data)
+        }
         val metadataChange = SnapshotMetadataChange.Builder()
             .setDescription(desc)
             .build()
