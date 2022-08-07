@@ -81,10 +81,16 @@ if Engine.has_singleton("GodotPlayGamesServices"):
 	
   # Initialize plugin by calling init method and passing to it a boolean to enable/disable displaying game pop-ups
   
-  var show_popups := true 
-  play_games_services.init(show_popups)
+  var show_popups := true
+  var request_email := true
+  var request_profile := true
+  #The client id must be created in [the google console](https://console.cloud.google.com/apis/credentials), an OAuth 2.0 Client credentials of a Web application type
+  var request_token := "Client ID"
+
+  play_games_services.init(show_popups, request_email, request_profile, request_token)
+
   # For enabling saved games functionality use below initialization instead
-  # play_games_services.initWithSavedGames(show_popups, "SavedGamesName")
+  # play_games_services.initWithSavedGames(show_popups, "SavedGamesName", request_email, request_profile, request_token)
   
   # Connect callbacks (Use only those that you need)
   play_games_services.connect("_on_sign_in_success", self, "_on_sign_in_success") # account_id: String
@@ -119,9 +125,16 @@ After what plugin was initialized you can use supported features
 play_games_services.signIn()
 
 # Callbacks:
-func _on_sign_in_success(account_id: String) -> void:
-	pass
-  
+func _on_sign_in_success(userProfile_json: String) -> void:
+	var userProfile = parse_json(userProfile_json)
+
+	# The returned JSON contains an object of userProfile info.
+	# Use the following keys to access the fields
+		userProfile["displayName"] # The user's display name
+		userProfile["email"] # The user's email
+		userProfile["token"] # User token for backend use
+		userProfile["id"] # The user's id
+
 func _on_sign_in_failed(error_code: int) -> void:
 	pass
 
