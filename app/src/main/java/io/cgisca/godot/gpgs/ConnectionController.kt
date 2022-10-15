@@ -13,7 +13,7 @@ class ConnectionController(
 ) {
 
     fun isConnected(): Pair<Boolean, UserProfile> {
-        val userProfile = UserProfile(null, null, null, null)
+        val userProfile = UserProfile(null, null, null, null, null)
         val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(activity)
             ?: return Pair(false, userProfile)
 
@@ -23,6 +23,7 @@ class ConnectionController(
                 it.displayName = googleSignInAccount.displayName
                 it.email = googleSignInAccount.email
                 it.token = googleSignInAccount.idToken
+                it.authCode = googleSignInAccount.serverAuthCode
                 it.id = googleSignInAccount.id
             }
             return Pair(GoogleSignIn.hasPermissions(googleSignInAccount, *signInOptions.scopeArray), userProfile)
