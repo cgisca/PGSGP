@@ -199,6 +199,7 @@ class PlayGameServicesGodot(godot: Godot) : GodotPlugin(godot), AchievementsList
                 signInOptionsBuilder.requestScopes(Scope(Scopes.DRIVE_APPFOLDER))
             if (requestToken.isNotEmpty()) {
                 signInOptionsBuilder.requestIdToken(requestToken)
+                signInOptionsBuilder.requestServerAuthCode(requestToken)
             }
             if (requestEmail)
                 signInOptionsBuilder.requestEmail()

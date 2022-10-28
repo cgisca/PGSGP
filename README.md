@@ -145,6 +145,7 @@ func _on_sign_in_success(userProfile_json: String) -> void:
 		userProfile["displayName"] # The user's display name
 		userProfile["email"] # The user's email
 		userProfile["token"] # User token for backend use
+		userProfile["authCode"] # ServerAuthCode one-time token to enable server-side access (like Firebase Auth)
 		userProfile["id"] # The user's id
 
 func _on_sign_in_failed(error_code: int) -> void:
